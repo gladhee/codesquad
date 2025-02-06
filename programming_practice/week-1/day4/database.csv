@@ -1,0 +1,11 @@
+이름,분류,승객수,생산년도,단종년도,단종여부
+Tuscani,Coupe,2,200109,200810,true
+Porter,Truck,3,197702,200405,true
+Cortina,Sedan,5,196801,198004,true
+Elantra,Sedan,5,199010,199512,true
+Equus,Sedan,5,199904,200912,true
+Grandeur,Sedan,5,198607,202305,false
+Pony,Sedan,5,197512,198201,true
+SantaFe,RV,7,200006,202305,false
+Aerotown,Bus,30,199406,202305,false
+Universe,Bus,45,200612,202305,false
