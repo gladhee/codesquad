@@ -32,11 +32,4 @@ public class SudokuValidator {
         return true;
     }
 
-
-
-//    public static boolean isValidBLOCK_SIZExBLOCK_SIZESquare(int[][] sudoku, int row, int column) {
-//
-//        return false;
-//    }
-
 }
