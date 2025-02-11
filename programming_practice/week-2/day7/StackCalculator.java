@@ -1,3 +1,6 @@
+import java.util.Map;
+import java.util.function.Supplier;
+
 public class StackCalculator {
 
     private static final String EMPTY = "EMPTY";
@@ -9,37 +12,32 @@ public class StackCalculator {
     private int registerA;
     private int registerB;
     private final MyStack<Integer> stack;
+    private final Map<String, Supplier<String>> commands;
 
     public StackCalculator(MyStack<Integer> stack) {
         registerA = -1;
         registerB = -1;
         this.stack = stack;
+        commands = initCommands();
+    }
+
+    private Map<String, Supplier<String>> initCommands() {
+        return Map.of(
+                "POPA", this::popA,
+                "POPB", this::popB,
+                "ADD", this::add,
+                "SUB", this::sub,
+                "PUSH0", this::push0,
+                "PUSH1", this::push1,
+                "PUSH2", this::push2,
+                "PUSH3", this::push3,
+                "SWAP", this::swap,
+                "PRINT", this::print
+        );
     }
 
     public String run(String command) {
-        if (command.equalsIgnoreCase("POPA")) {
-            return popA();
-        } else if (command.equalsIgnoreCase("POPB")) {
-            return popB();
-        } else if (command.equalsIgnoreCase("ADD")) {
-            return add();
-        } else if (command.equalsIgnoreCase("SUB")) {
-            return sub();
-        } else if (command.equalsIgnoreCase("PUSH0")) {
-            return push0();
-        } else if (command.equalsIgnoreCase("PUSH1")) {
-            return push1();
-        } else if (command.equalsIgnoreCase("PUSH2")) {
-            return push2();
-        } else if (command.equalsIgnoreCase("PUSH3")) {
-            return push3();
-        } else if (command.equalsIgnoreCase("SWAP")) {
-            return swap();
-        } else if (command.equalsIgnoreCase("PRINT")) {
-            return print();
-        } else {
-            return UNKNOWN;
-        }
+        return commands.getOrDefault(command, () -> UNKNOWN).get();
     }
 
 
