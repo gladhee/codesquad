@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Application {
 
@@ -9,45 +10,31 @@ public class Application {
 //        String[] input = {"PUSH3", "PUSH2", "PUSH1", "POPA", "POPB", "SWAP", "SUB", "POPA", "POPB", "ADD", "PRINT"}; // ==> return ["4"]
         String[] input = {"ADD", "PUSH3", "PUSH1", "PUSH0", "PUSH2", "PUSH1", "PUSH3", "PUSH2", "PUSH0", "PUSH3", "PUSH4"}; // ==> return ["ERROR", "OVERFLOW", "UNKNOWN"]
 
-        dequeTest(input);
+        // 각각의 스택 구현에 대해 테스트 실행
+        runTest("Deque Test", MyDeque::new, input);
         System.out.println("====================================");
-        listTest(input);
+        runTest("List Test", MyList::new, input);
     }
 
-    private static void dequeTest(String[] input) {
-        System.out.println("Deque Test");
-
+    /**
+     * @param testName 테스트 이름 출력용
+     * @param stackSupplier 스택 인스턴스를 생성하는 Supplier (예: MyDeque::new, MyList::new)
+     * @param input 실행할 커맨드 배열
+     * @param <S> MyStack<Integer>을 구현한 타입
+     */
+    private static <S extends MyStack<Integer>> void runTest(String testName, Supplier<S> stackSupplier, String[] input) {
+        System.out.println(testName);
         List<String> answer = new ArrayList<>();
-        MyStack<Integer> stack = new MyDeque<>();
+        S stack = stackSupplier.get();
         StackCalculator calculator = new StackCalculator(stack);
 
         for (String command : input) {
             String ret = calculator.run(command);
-            if (ret.isEmpty()) {
-                continue;
+            if (!ret.isEmpty()) {
+                answer.add(ret);
             }
-            answer.add(ret);
         }
 
         System.out.println(answer);
     }
-
-    private static void listTest(String[] input) {
-        System.out.println("List Test");
-
-        List<String> answer = new ArrayList<>();
-        MyStack<Integer> stack = new MyList<>();
-        StackCalculator calculator = new StackCalculator(stack);
-
-        for (String command : input) {
-            String ret = calculator.run(command);
-            if (ret.isEmpty()) {
-                continue;
-            }
-            answer.add(ret);
-        }
-
-        System.out.println(answer);
-    }
-
 }
