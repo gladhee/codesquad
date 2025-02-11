@@ -12,7 +12,7 @@ public class StackCalculator {
     private int registerA;
     private int registerB;
     private final MyStack<Integer> stack;
-    private final Map<String, Supplier<String>> commands;
+    private final Map<Command, Supplier<String>> commands;
 
     public StackCalculator(MyStack<Integer> stack) {
         registerA = -1;
@@ -21,23 +21,26 @@ public class StackCalculator {
         commands = initCommands();
     }
 
-    private Map<String, Supplier<String>> initCommands() {
+    private Map<Command, Supplier<String>> initCommands() {
         return Map.of(
-                "POPA", this::popA,
-                "POPB", this::popB,
-                "ADD", this::add,
-                "SUB", this::sub,
-                "PUSH0", this::push0,
-                "PUSH1", this::push1,
-                "PUSH2", this::push2,
-                "PUSH3", this::push3,
-                "SWAP", this::swap,
-                "PRINT", this::print
+                Command.POPA, this::popA,
+                Command.POPB, this::popB,
+                Command.ADD, this::add,
+                Command.SUB, this::sub,
+                Command.PUSH0, this::push0,
+                Command.PUSH1, this::push1,
+                Command.PUSH2, this::push2,
+                Command.PUSH3, this::push3,
+                Command.SWAP, this::swap,
+                Command.PRINT, this::print
         );
     }
 
-    public String run(String command) {
-        return commands.getOrDefault(command, () -> UNKNOWN).get();
+    public String run(String commandStr) {
+        return Command.from(commandStr)
+                .map(commands::get)
+                .map(Supplier::get)
+                .orElse(UNKNOWN);
     }
 
     private String popA() {
