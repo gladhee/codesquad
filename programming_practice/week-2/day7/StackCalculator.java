@@ -3,6 +3,7 @@ import java.util.function.Supplier;
 
 public class StackCalculator {
 
+    private static final int UNINITIALIZED = -1;
     private static final String EMPTY = "EMPTY";
     private static final String ERROR = "ERROR";
     private static final String OVERFLOW = "OVERFLOW";
@@ -15,8 +16,8 @@ public class StackCalculator {
     private final Map<Command, Supplier<String>> commands;
 
     public StackCalculator(MyStack<Integer> stack) {
-        registerA = -1;
-        registerB = -1;
+        registerA = UNINITIALIZED;
+        registerB = UNINITIALIZED;
         this.stack = stack;
         commands = initCommands();
     }
