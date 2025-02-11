@@ -40,7 +40,6 @@ public class StackCalculator {
         return commands.getOrDefault(command, () -> UNKNOWN).get();
     }
 
-
     private String popA() {
         if (stack.isEmpty()) {
             return EMPTY;
@@ -48,7 +47,6 @@ public class StackCalculator {
         registerA = stack.pop();
         return NONE;
     }
-
 
     private String popB() {
         if (stack.isEmpty()) {
@@ -58,7 +56,6 @@ public class StackCalculator {
         return NONE;
     }
 
-
     private String add() {
         if (isUnusable()) {
             return ERROR;
@@ -66,7 +63,6 @@ public class StackCalculator {
         stack.push(registerA + registerB);
         return NONE;
     }
-
 
     private String sub() {
         if (isUnusable()) {
@@ -76,7 +72,6 @@ public class StackCalculator {
         return NONE;
     }
 
-
     private String push0() {
         if (isOverflow()) {
             return OVERFLOW;
@@ -84,7 +79,6 @@ public class StackCalculator {
         stack.push(0);
         return NONE;
     }
-
 
     private String push1() {
         if (isOverflow()) {
@@ -94,7 +88,6 @@ public class StackCalculator {
         return NONE;
     }
 
-
     private String push2() {
         if (isOverflow()) {
             return OVERFLOW;
@@ -103,7 +96,6 @@ public class StackCalculator {
         return NONE;
     }
 
-
     private String push3() {
         if (isOverflow()) {
             return OVERFLOW;
@@ -111,7 +103,6 @@ public class StackCalculator {
         stack.push(3);
         return NONE;
     }
-
 
     private String swap() {
         if (isUnusable()) {
@@ -122,7 +113,6 @@ public class StackCalculator {
         registerB = temp;
         return NONE;
     }
-
 
     private String print() {
         if (stack.isEmpty()) {
