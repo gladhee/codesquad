@@ -18,7 +18,7 @@ public class Application {
         System.out.println("Deque Test");
 
         List<String> answer = new ArrayList<>();
-        MyStack<Integer> stack = new MyList<>();
+        MyStack<Integer> stack = new MyDeque<>();
         StackCalculator calculator = new StackCalculator(stack);
 
         for (String command : input) {
