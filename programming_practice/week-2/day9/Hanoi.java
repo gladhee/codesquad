@@ -55,11 +55,15 @@ public class Hanoi {
         StringBuilder sb = new StringBuilder();
         sb.append("Step ").append(this.current).append("\n");
 
+        List<String> desk1 = this.desks[0].toList();
+        List<String> desk2 = this.desks[1].toList();
+        List<String> desk3 = this.desks[2].toList();
+
         for (int i = 0; i < MAX_WIDTH; ++i) {
             sb.append(String.join(" ", List.of(
-                    this.desks[0].toList().get(i),
-                    this.desks[1].toList().get(i),
-                    this.desks[2].toList().get(i)
+                    desk1.get(i),
+                    desk2.get(i),
+                    desk3.get(i)
             )));
             sb.append("\n");
         }
