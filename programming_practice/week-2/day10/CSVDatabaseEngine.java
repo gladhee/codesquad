@@ -10,14 +10,25 @@ public class CSVDatabaseEngine implements ASTVisitor {
 
     private static final String CSV_EXTENSION = ".csv";
 
+    private final MetaFileManager metaFileManager;
+
+    public CSVDatabaseEngine(MetaFileManager metaFileManager) {
+        this.metaFileManager = metaFileManager;
+    }
+
     // 기존 코드 내부에서 visit() 메서드들로 분할
     @Override
     public void visit(CreateTableNode node) throws IOException {
         String tableName = node.tableName();
         List<ColumnDefinition> columns = node.columns();
+
         List<String> header = columns.stream()
                 .map(ColumnDefinition::columnName)
                 .collect(Collectors.toList());
+
+        // 메타파일 등록
+        metaFileManager.createTable(tableName, columns);
+
         Path filePath = Paths.get(tableName + CSV_EXTENSION);
         if (Files.exists(filePath)) {
             throw new IOException("Table " + tableName + " already exists.");
@@ -33,6 +44,9 @@ public class CSVDatabaseEngine implements ASTVisitor {
     public void visit(DropTableNode node) throws IOException {
         String tableName = node.tableName();
 
+        // 메타파일에서 삭제
+        metaFileManager.dropTable(tableName);
+
         Path filePath = Paths.get(tableName + CSV_EXTENSION);
         if (Files.exists(filePath)) {
             Files.delete(filePath);
@@ -45,8 +59,21 @@ public class CSVDatabaseEngine implements ASTVisitor {
     @Override
     public void visit(InsertNode node) throws IOException {
         String tableName = node.tableName();
+        List<ColumnDefinition> columns = metaFileManager.getColumns(tableName);
         List<String> values = node.values();
-        Path filePath = Paths.get(tableName + ".csv");
+        if (values.size() != columns.size()) {
+            throw new RuntimeException("Column count mismatch: expected "
+                    + columns.size() + " but got " + values.size());
+        }
+
+        // 타입 검증
+        for (int i = 0; i < columns.size(); i++) {
+            ColumnDefinition colDef = columns.get(i);
+            String value = values.get(i);
+            validateValue(colDef, value);
+        }
+
+        Path filePath = Paths.get(tableName + CSV_EXTENSION);
 
         if (!Files.exists(filePath)) {
             throw new IOException("Table " + tableName + " does not exist.");
@@ -155,6 +182,19 @@ public class CSVDatabaseEngine implements ASTVisitor {
         } catch (NumberFormatException e) {
             return rowValue.compareTo(literal);
         }
+    }
+
+    private void validateValue(ColumnDefinition colDef, String value) {
+        String type = colDef.dataType();
+        if (type.equalsIgnoreCase("Numeric")) {
+            try {
+                Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Column " + colDef.columnName()
+                        + " expects Numeric but got: " + value);
+            }
+        }
+        // String 타입이면 통과
     }
 
 }
