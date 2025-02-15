@@ -12,6 +12,7 @@ public class Lexer {
     private static final char GREATER = '>';
     private static final char LESS = '<';
     private static final char DOUBLE_QUOTE = '"';
+    private static final char UNDERSCORE = '_';
     private static final char EOF = '\0';
 
     private final String input;
@@ -35,8 +36,8 @@ public class Lexer {
                 tokens.add(readStringLiteral());
                 continue;
             }
-            if (isSingleCharToken(c)) {
-                tokens.add(singleCharToken(c));
+            if (isSymbolToken(c)) {
+                tokens.add(generateSymbolToken(c));
                 consume();
                 continue;
             }
@@ -44,7 +45,7 @@ public class Lexer {
                 tokens.add(readNumber());
                 continue;
             }
-            if (Character.isLetter(c) || c == '_') {
+            if (Character.isLetter(c) || c == UNDERSCORE) {
                 tokens.add(readIdentifierOrKeyword());
                 continue;
             }
@@ -58,7 +59,7 @@ public class Lexer {
     // 식별자 및 키워드 읽기
     private Token readIdentifierOrKeyword() {
         StringBuilder sb = new StringBuilder();
-        while (Character.isLetterOrDigit(currentChar()) || currentChar() == '_') {
+        while (Character.isLetterOrDigit(currentChar()) || currentChar() == UNDERSCORE) {
             sb.append(currentChar());
             consume();
         }
@@ -103,7 +104,7 @@ public class Lexer {
     }
 
     // 단일 문자 토큰 생성
-    private Token singleCharToken(char c) {
+    private Token generateSymbolToken(char c) {
         TokenType type = switch (c) {
             case LEFT_PAREN -> TokenType.LEFT_PAREN;
             case RIGHT_PAREN -> TokenType.RIGHT_PAREN;
@@ -117,7 +118,7 @@ public class Lexer {
         return new Token(type, String.valueOf(c));
     }
 
-    private boolean isSingleCharToken(char c) {
+    private boolean isSymbolToken(char c) {
         return c == LEFT_PAREN || c == RIGHT_PAREN || c == COMMA ||
                 c == SEMICOLON || c == EQUALS || c == GREATER || c == LESS;
     }
