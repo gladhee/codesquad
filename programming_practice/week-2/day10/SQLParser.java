@@ -144,7 +144,7 @@ public class SQLParser {
         String tableName = expect(TokenType.IDENTIFIER).lexeme();
         expect(TokenType.SET);
         List<Assignment> assignments = new ArrayList<>();
-        do {
+        while (true) {
             String colName = expect(TokenType.IDENTIFIER).lexeme();
             expect(TokenType.EQUALS);
             Token valueToken = consume();
@@ -154,9 +154,12 @@ public class SQLParser {
                 throw new ParseException("Invalid assignment value: " + valueToken.lexeme(), pos);
             }
             assignments.add(new Assignment(colName, valueToken.lexeme()));
-            if (peek().type() == TokenType.COMMA) consume();
-            else break;
-        } while (true);
+            if (peek().type() == TokenType.COMMA) {
+                consume();
+            } else {
+                break;
+            }
+        }
         Expression whereClause = null;
         if (peek().type() == TokenType.WHERE) {
             consume();
