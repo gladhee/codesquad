@@ -3,7 +3,8 @@ import java.util.List;
 public class Application {
 
     public static void main(String[] args) {
-        CSVDatabaseEngine engine = new CSVDatabaseEngine();
+        MetaFileManager meta = new MetaFileManager("table.meta");
+        CSVDatabaseEngine engine = new CSVDatabaseEngine(meta);
 
         while (true) {
             String input = Input.prompt();
