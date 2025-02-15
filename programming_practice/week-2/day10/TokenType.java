@@ -11,6 +11,7 @@ public enum TokenType {
     DELETE,
     FROM,
     WHERE,
+    DROP,
 
     // Symbol
     LEFT_PAREN,
@@ -24,6 +25,8 @@ public enum TokenType {
 
     // literal
     IDENTIFIER,
+    STRING,
+    NUMBER,
 
     // End of Input
     EOF
