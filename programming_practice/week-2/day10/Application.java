@@ -3,22 +3,29 @@ import java.util.List;
 public class Application {
 
     public static void main(String[] args) {
-        String input = Input.prompt();
+        CSVDatabaseEngine engine = new CSVDatabaseEngine();
 
-
-        try {
-            Lexer lexer = new Lexer(input);
-            List<Token> tokens = lexer.tokenize();
-            SQLParser parser = new SQLParser(tokens);
-            CSVDatabaseEngine engine = new CSVDatabaseEngine();
-
-            while (parser.peek().type() != TokenType.EOF) {
-                ASTNode stmt = parser.parseStatement();
-                stmt.accept(engine);
+        while (true) {
+            String input = Input.prompt();
+            if (input.equalsIgnoreCase("exit")) {
+                break;
             }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+
+            try {
+                Lexer lexer = new Lexer(input);
+                List<Token> tokens = lexer.tokenize();
+                SQLParser parser = new SQLParser(tokens);
+
+                while (parser.peek().type() != TokenType.EOF) {
+                    ASTNode stmt = parser.parseStatement();
+                    stmt.accept(engine);
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
-    }\
+
+        System.out.println("Bye!");
+    }
 
 }
