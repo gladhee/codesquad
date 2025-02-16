@@ -59,10 +59,7 @@ public class SQLParser {
             }
         }
         expect(TokenType.RIGHT_PAREN);
-
-        if (peek().type() == TokenType.SEMICOLON) {
-            consume();
-        }
+        expect(TokenType.SEMICOLON);
 
         return new CreateTableNode(tableName, columns);
     }
@@ -118,9 +115,8 @@ public class SQLParser {
             }
         }
         expect(TokenType.RIGHT_PAREN);
-        if (peek().type() == TokenType.SEMICOLON) {
-            consume();
-        }
+        expect(TokenType.SEMICOLON);
+
         return new InsertNode(tableName, columns, values);
     }
 
@@ -134,7 +130,8 @@ public class SQLParser {
             consume();
             whereClause = parseExpression();
         }
-        if (peek().type() == TokenType.SEMICOLON) consume();
+        expect(TokenType.SEMICOLON);
+
         return new DeleteNode(tableName, whereClause);
     }
 
@@ -165,7 +162,8 @@ public class SQLParser {
             consume();
             whereClause = parseExpression();
         }
-        if (peek().type() == TokenType.SEMICOLON) consume();
+        expect(TokenType.SEMICOLON);
+
         return new UpdateNode(tableName, assignments, whereClause);
     }
 
