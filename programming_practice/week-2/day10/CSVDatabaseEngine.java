@@ -129,27 +129,51 @@ public class CSVDatabaseEngine implements ASTVisitor {
         String tableName = node.tableName();
         Expression whereClause = node.whereClause();
         Path filePath = Paths.get(tableName + CSV_EXTENSION);
+
         if (!Files.exists(filePath)) {
             throw new IOException("Table " + tableName + " does not exist.");
         }
+
         List<String> lines = Files.readAllLines(filePath);
         if (lines.isEmpty()) return;
+
         String headerLine = lines.getFirst();
         String[] headers = headerLine.split(",");
         List<String> newLines = new ArrayList<>();
         newLines.add(headerLine);
+
+        List<String> deletedRows = new ArrayList<>();
+
         for (int i = 1; i < lines.size(); i++) {
             String row = lines.get(i);
             String[] values = row.split(",");
+
+            // (컬럼명 -> 값) 매핑
             Map<String, String> rowMap = new HashMap<>();
             for (int j = 0; j < headers.length && j < values.length; j++) {
                 rowMap.put(headers[j], values[j]);
             }
-            evaluateWhere(whereClause, rowMap);
-            newLines.add(row);
+
+            // evaluateWhere(...)가 true면 “조건 만족” = 삭제 대상
+            boolean match = evaluateWhere(whereClause, rowMap);
+
+            if (match) {
+                deletedRows.add(row);
+            } else {
+                newLines.add(row);
+            }
         }
+
         Files.write(filePath, newLines);
-        System.out.println("Deleted rows from " + tableName + " matching condition: " + whereClause);
+
+        if (deletedRows.isEmpty()) {
+            System.out.println("조건에 맞는 데이터가 존재하지 않습니다.");
+        } else {
+            for (String deleted : deletedRows) {
+                System.out.println("DELETED " + deleted);
+            }
+            System.out.println("총 " + deletedRows.size() + "건 삭제되었습니다.");
+        }
     }
 
     // 간단한 WHERE evaluator: 단순 이항 표현식만 지원
