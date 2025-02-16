@@ -79,6 +79,12 @@ public class CSVDatabaseEngine implements ASTVisitor {
             throw new IOException("Table " + tableName + " does not exist.");
         }
 
+        // CSV 파일 전체 읽기
+        List<String> lines = Files.readAllLines(filePath);
+        if (lines.size() >= 11) {
+            throw new RuntimeException("해당 테이블에는 최대 9줄까지만 삽입할 수 있습니다.");
+        }
+
         // CSV 한 줄(레코드) + 줄바꿈
         String row = String.join(",", values) + System.lineSeparator();
 
