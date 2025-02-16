@@ -71,7 +71,6 @@ public class SQLParser {
 
         // columns
         expect(TokenType.LEFT_PAREN);
-        consume();
         while (peek().type() != TokenType.RIGHT_PAREN) {
             columns.add(expect(TokenType.IDENTIFIER).lexeme());
             if (peek().type() == TokenType.COMMA) {
