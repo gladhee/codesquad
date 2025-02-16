@@ -17,18 +17,6 @@ public class SQLParser {
         return new Token(TokenType.EOF, "");
     }
 
-    public Token consume() {
-        return tokens.get(pos++);
-    }
-
-    public Token expect(TokenType type) throws ParseException {
-        Token token = peek();
-        if (token.type() != type) {
-            throw new ParseException("Expected token " + type + " but found " + token.type(), pos);
-        }
-        return consume();
-    }
-
     public ASTNode parseStatement() throws ParseException {
         Token token = peek();
         return switch(token.type()) {
@@ -186,6 +174,18 @@ public class SQLParser {
             case NUMBER, STRING -> new LiteralExpression(token.lexeme());
             default -> throw new ParseException("Unexpected token in expression: " + token.lexeme(), pos);
         };
+    }
+
+    private Token expect(TokenType type) throws ParseException {
+        Token token = peek();
+        if (token.type() != type) {
+            throw new ParseException("Expected token " + type + " but found " + token.type(), pos);
+        }
+        return consume();
+    }
+
+    private Token consume() {
+        return tokens.get(pos++);
     }
 
 }
