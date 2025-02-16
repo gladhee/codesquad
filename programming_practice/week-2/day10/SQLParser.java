@@ -57,40 +57,40 @@ public class SQLParser {
         expect(TokenType.DROP);
         expect(TokenType.TABLE);
         String tableName = expect(TokenType.IDENTIFIER).lexeme();
-        if (peek().type() == TokenType.SEMICOLON) {
-            consume();
-        }
+        expect(TokenType.SEMICOLON);
 
         return new DropTableNode(tableName);
     }
 
-    // INSERT INTO tableName [(col1, col2,...)] VALUES (val1, val2, ...)
+    // INSERT INTO tableName (col1, col2,...) VALUES (val1, val2, ...)
     private ASTNode parseInsert() throws ParseException {
         expect(TokenType.INSERT);
         expect(TokenType.INTO);
         String tableName = expect(TokenType.IDENTIFIER).lexeme();
         List<String> columns = new ArrayList<>();
-        if (peek().type() == TokenType.LEFT_PAREN) {
-            consume();
-            while (peek().type() != TokenType.RIGHT_PAREN) {
-                columns.add(expect(TokenType.IDENTIFIER).lexeme());
-                if (peek().type() == TokenType.COMMA) {
-                    consume();
-                }
-                else {
-                    break;
-                }
+
+        // columns
+        expect(TokenType.LEFT_PAREN);
+        consume();
+        while (peek().type() != TokenType.RIGHT_PAREN) {
+            columns.add(expect(TokenType.IDENTIFIER).lexeme());
+            if (peek().type() == TokenType.COMMA) {
+                consume();
             }
-            expect(TokenType.RIGHT_PAREN);
+            else {
+                break;
+            }
         }
+        expect(TokenType.RIGHT_PAREN);
+
+        // values
         expect(TokenType.VALUES);
         expect(TokenType.LEFT_PAREN);
         List<String> values = new ArrayList<>();
         while (peek().type() != TokenType.RIGHT_PAREN) {
             Token valToken = peek();
             if (valToken.type() == TokenType.STRING ||
-                    valToken.type() == TokenType.NUMBER ||
-                    valToken.type() == TokenType.IDENTIFIER) {
+                    valToken.type() == TokenType.NUMBER) {
                 values.add(consume().lexeme());
             } else {
                 throw new ParseException("Unexpected token in VALUES: " + valToken.lexeme(), pos);
@@ -102,6 +102,7 @@ public class SQLParser {
                 break;
             }
         }
+
         expect(TokenType.RIGHT_PAREN);
         expect(TokenType.SEMICOLON);
 
@@ -113,11 +114,8 @@ public class SQLParser {
         expect(TokenType.DELETE);
         expect(TokenType.FROM);
         String tableName = expect(TokenType.IDENTIFIER).lexeme();
-        Expression whereClause = null;
-        if (peek().type() == TokenType.WHERE) {
-            consume();
-            whereClause = parseExpression();
-        }
+        expect(TokenType.WHERE);
+        Expression whereClause = parseExpression();
         expect(TokenType.SEMICOLON);
 
         return new DeleteNode(tableName, whereClause);
@@ -133,23 +131,21 @@ public class SQLParser {
             String colName = expect(TokenType.IDENTIFIER).lexeme();
             expect(TokenType.EQUALS);
             Token valueToken = consume();
-            if (valueToken.type() != TokenType.STRING &&
-                    valueToken.type() != TokenType.NUMBER &&
-                    valueToken.type() != TokenType.IDENTIFIER) {
+            if (valueToken.type() == TokenType.STRING ||
+                    valueToken.type() == TokenType.NUMBER) {
+                assignments.add(new Assignment(colName, valueToken.lexeme()));
+                if (peek().type() == TokenType.COMMA) {
+                    consume();
+                } else {
+                    break;
+                }
+            }
+            else {
                 throw new ParseException("Invalid assignment value: " + valueToken.lexeme(), pos);
             }
-            assignments.add(new Assignment(colName, valueToken.lexeme()));
-            if (peek().type() == TokenType.COMMA) {
-                consume();
-            } else {
-                break;
-            }
         }
-        Expression whereClause = null;
-        if (peek().type() == TokenType.WHERE) {
-            consume();
-            whereClause = parseExpression();
-        }
+        expect(TokenType.WHERE);
+        Expression whereClause = parseExpression();
         expect(TokenType.SEMICOLON);
 
         return new UpdateNode(tableName, assignments, whereClause);
@@ -164,7 +160,7 @@ public class SQLParser {
             Expression right = parseTerm();
             return new BinaryExpression(left, op.lexeme(), right);
         }
-        return left;
+        throw new ParseException("Unexpected token in expression: " + peek().lexeme(), pos);
     }
 
     private Expression parseTerm() throws ParseException {
