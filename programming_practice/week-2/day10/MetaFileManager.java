@@ -42,7 +42,6 @@ public class MetaFileManager {
                     // "singer,String" 형태 -> split
                     String[] parts = colLine.split(",");
                     if (parts.length != 2) {
-                        // 형식 오류
                         throw new RuntimeException("Invalid column definition: " + colLine);
                     }
                     columns.add(new ColumnDefinition(parts[0].trim(), parts[1].trim()));

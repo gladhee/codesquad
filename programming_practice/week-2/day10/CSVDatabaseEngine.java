@@ -16,7 +16,6 @@ public class CSVDatabaseEngine implements ASTVisitor {
         this.metaFileManager = metaFileManager;
     }
 
-    // 기존 코드 내부에서 visit() 메서드들로 분할
     @Override
     public void visit(CreateTableNode node) throws IOException {
         String tableName = node.tableName();
@@ -79,16 +78,13 @@ public class CSVDatabaseEngine implements ASTVisitor {
             throw new IOException("Table " + tableName + " does not exist.");
         }
 
-        // CSV 파일 전체 읽기
         List<String> lines = Files.readAllLines(filePath);
         if (lines.size() >= 11) {
             throw new RuntimeException("해당 테이블에는 최대 9줄까지만 삽입할 수 있습니다.");
         }
 
-        // CSV 한 줄(레코드) + 줄바꿈
         String row = String.join(",", values) + System.lineSeparator();
 
-        // 파일에 이어쓰기(APPEND)
         Files.write(filePath, row.getBytes(), StandardOpenOption.APPEND);
 
         System.out.println("Inserted row into " + tableName + ": " + row);
@@ -182,7 +178,6 @@ public class CSVDatabaseEngine implements ASTVisitor {
         }
     }
 
-    // 간단한 WHERE evaluator: 단순 이항 표현식만 지원
     private boolean evaluateWhere(Expression expr, Map<String, String> row) {
         // WHERE 절이 없으면 false (조건 미충족 → UPDATE/DELETE 안 함)
         if (expr == null) return false;

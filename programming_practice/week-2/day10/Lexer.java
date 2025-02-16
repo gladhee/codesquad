@@ -103,7 +103,6 @@ public class Lexer {
         return new Token(TokenType.NUMBER, sb.toString());
     }
 
-    // 단일 문자 토큰 생성
     private Token generateSymbolToken(char c) {
         TokenType type = switch (c) {
             case LEFT_PAREN -> TokenType.LEFT_PAREN;
