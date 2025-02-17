@@ -9,11 +9,11 @@ public class Application {
 
         try {
             Logs logs = fileReader.read();
+            Filter input = new Filter(logs);
 
-            Logs newLogs = logs.filterByLogLevel("INFO")
-                    .sortByTime();
+            Logs filteredByInput = input.filter();
 
-            createReport(newLogs);
+            createReport(filteredByInput);
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
@@ -22,6 +22,7 @@ public class Application {
     private static void createReport(Logs logs) {
         try (PrintWriter writer = new PrintWriter("report.log")) {
             writer.print(logs);
+            System.out.println("Report created successfully.");
         } catch (IOException e) {
             System.out.println("Error writing file: " + e.getMessage());
         }
