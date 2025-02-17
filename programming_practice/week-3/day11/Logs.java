@@ -69,9 +69,17 @@ public class Logs {
 
     @Override
     public String toString() {
-        return logs.stream()
+        StringBuilder sb = new StringBuilder();
+        sb.append(logs.stream()
                 .map(Log::toString)
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining("\n")));
+        sb.append("\n");
+        sb.append("=== log level count ===\n");
+        countByLogLevel().forEach((level, count) -> sb.append(level).append(": ").append(count).append("\n"));
+        sb.append("=== process count ===\n");
+        countByProcess().forEach((process, count) -> sb.append(process).append(": ").append(count).append("\n"));
+        return sb.toString();
+
     }
 
 }
