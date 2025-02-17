@@ -43,3 +43,13 @@
 - [ ] 로그레벨, 프로세스 별로 카운트 값을 가져온다.
 - [ ] 각 메소드별로 새로운 Logs를 만들어서 반환한다.
 - [ ] `toString` 메소드를 통해 출력한다.
+
+## Mistake Party
+
+Log 파일 중간에 멀티라인이 존재해서 로그를 제대로 읽지 못하는 경우가 발생했다.
+```
+info	14:23:43.373717+0900	searchpartyd	"Reconciled advertisement <mask.hash: '0gtR0VUtyKLUHLjssnTCWg=='>, multiPart: 000, hint: none, Type18: {type: apple, battery: high, maintained: false multipart: 000},
+index: 4024, sequence: .primary, beacon: <mask.hash: '/+5od1uUK02A328zcF0PcQ=='>,
+hasLocation: false.
+```
+그래서 한 줄 읽을 때마다 `\t` 으로 split해서 사이즈가 4가 아니면 마지막 로그에 추가해주는 방식으로 해결했다.
