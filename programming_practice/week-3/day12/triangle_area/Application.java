@@ -7,6 +7,7 @@ public class Application {
         Plane plane = new Plane(diagram);
 
         System.out.println(plane);
+        System.out.println(diagram);
     }
 
 }
