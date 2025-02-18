@@ -6,7 +6,7 @@ public class Application {
 
         Plane plane = new Plane(point1, point2);
 
-        plane.draw();
+        System.out.println(plane);
         System.out.println("Distance between points: " + plane.distance());
     }
 

@@ -24,7 +24,8 @@ public class Plane {
         return Math.sqrt(Math.pow(p2.x() - p1.x(), 2) + Math.pow(p2.y() - p1.y(), 2));
     }
 
-    public void draw() {
+    @Override
+    public String toString() {
         char[][] plane = new char[HEIGHT][WIDTH];
         for (int r = 0; r < HEIGHT; r++) {
             for (int c = 0; c < WIDTH; c++) {
@@ -85,7 +86,8 @@ public class Plane {
             }
             sb.append("\n");
         }
-        System.out.println(sb);
+
+        return sb.toString();
     }
 
     private void drawPerpendicular(char[][] plane, Point p) {
