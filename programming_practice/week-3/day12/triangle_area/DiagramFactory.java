@@ -14,11 +14,11 @@ public class DiagramFactory {
     private final List<Map.Entry<Predicate<Integer>, Function<List<Point>, Diagram>>> creators =
             List.of(
                     new AbstractMap.SimpleEntry<>(
-                            (Predicate<Integer>) (n -> n == 2),
+                            n -> n == 2,
                             points -> new Straight(points.get(0), points.get(1))
                     ),
                     new AbstractMap.SimpleEntry<>(
-                            (Predicate<Integer>) (n -> n == 3),
+                            n -> n == 3,
                             points -> new Triangle(points.get(0), points.get(1), points.get(2))
                     )
             );
