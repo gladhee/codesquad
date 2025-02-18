@@ -1,10 +1,12 @@
+import java.util.List;
+
 public class Application {
 
     public static void main(String[] args) {
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(14, 15);
+        Input input = new Input();
+        List<Point> points = input.getPoints();
 
-        Plane plane = new Plane(point1, point2);
+        Plane plane = new Plane(points.get(0), points.get(1));
 
         System.out.println(plane);
         System.out.println("Distance between points: " + plane.distance());
