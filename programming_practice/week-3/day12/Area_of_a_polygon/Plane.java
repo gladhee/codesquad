@@ -83,9 +83,15 @@ public class Plane {
             int colP = X_OFFSET + 2 * p.x();
 
             for (int r = 1; r <= rowP; r++) {
+                if (plane[r][colP] == POINT) {
+                    continue;
+                }
                 plane[r][colP] = VERTICAL;
             }
             for (int c = X_OFFSET; c <= colP; c++) {
+                if (plane[rowP][c] == POINT) {
+                    continue;
+                }
                 plane[rowP][c] = HORIZONTAL;
             }
             plane[Y_OFFSET][X_OFFSET] = INTERSECTION;
