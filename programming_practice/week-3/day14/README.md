@@ -71,3 +71,19 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 1024 
 c언어와 유사하게 Null-terminated 하게 readBytes 를 구현했는데 writeBytes 에서 `NULL`값을 넣지 않아서 발생한 문제
 
 writeBytes 에서 끝에 `NULL`값을 넣어주니 정상적으로 동작
+
+## 📝 회고
+
+## 📌 오늘의 학습 내용
+- `Heap Memory` 구조를 처리하는 프로그램 구현
+- c언어와 최대한 유사하게 할려다보니 c언어 특성을 다시 한번 상기
+
+## 💡 좋았던 점
+- ✅ c언어와 유사하게 구현하려고 노력한 점
+- ✅ 남들과 다르게 read 및 write 기능까지 구현해서 뿌듯함
+
+## 🤔 아쉬웠던 점
+- ❌ java라는 고급언어의 특성을 살리지 못하고 c언어처럼 구현한 점
+
+📝 개선할 점 & 내일의 목표
+- java식으로 표현을 바꿔보기
