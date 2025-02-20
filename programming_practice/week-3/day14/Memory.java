@@ -116,6 +116,33 @@ public class Memory {
         return result;
     }
 
+    public void writeBytes(int ptr, byte[] data) {
+        for (int i = 0; i < data.length; i++) {
+            if (memory[ptr + i] == NON_ALLOCATED) {
+                throw new SegmentationFaultException();
+            }
+
+            memory[ptr + i] = data[i];
+        }
+        memory[ptr + data.length] = NULL;
+    }
+
+    public String readBytes(int ptr) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (true) {
+            if (memory[ptr + i] == NON_ALLOCATED) {
+                throw new SegmentationFaultException();
+            }
+            if (memory[ptr + i] == NULL) {
+                break;
+            }
+            sb.append((char) memory[ptr + i]);
+            i++;
+        }
+        return sb.toString();
+    }
+
     public void reset() {
         memory = new byte[0];
         allocations.clear();
