@@ -58,3 +58,16 @@
 - `readBytes()`
   - [ ] 주소를 받아서 해당 메모리에 **저장된 값을 반환**
   - [ ] 할당되지 않는 공간일 경우 **예외처리**
+
+## Mistake Party
+
+`byte[] memory` 에 직접 값을 `writeByte(int ptr, byte[] data)`  를 이용해 메모리에 값을 삽입 후
+`readByte(int ptr)` 로 값을 읽어오는데, `ArrayIndexOutOfBoundsException` 발생
+```
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 1024 out of bounds for length 1024
+	at Memory.readBytes(Memory.java:134)
+	at Application.main(Application.java:28)
+```
+c언어와 유사하게 Null-terminated 하게 readBytes 를 구현했는데 writeBytes 에서 `NULL`값을 넣지 않아서 발생한 문제
+
+writeBytes 에서 끝에 `NULL`값을 넣어주니 정상적으로 동작
