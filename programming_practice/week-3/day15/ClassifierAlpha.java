@@ -1,54 +1,19 @@
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 public class ClassifierAlpha {
-    private int number;
 
-    public ClassifierAlpha(int number) {
-        this.number = number;
-    }
+    public Predicate<Integer> isPerfect = n -> IntStream.rangeClosed(1, n / 2).filter(i -> n % i == 0).sum() == n;
 
-    public boolean isFactor(int potentialFactor) {
-        return number % potentialFactor == 0;
-    }
+    public Predicate<Integer> isDeficient =  n -> IntStream.rangeClosed(1, n/2).filter(i -> n % i == 0).sum() < n;
 
-    public Set<Integer> factors() {
-        HashSet<Integer> factors = new HashSet<>();
-        for (int pod=1; pod <= Math.sqrt(number); pod++) {
-            if (isFactor(pod)) {
-                factors.add(pod);
-                factors.add(number / pod);
-            }
-        }
-        return factors;
-    }
+    public Predicate<Integer> isAbundant = n -> IntStream.rangeClosed(1, n/2).filter(i -> n % i == 0).sum() > n;
 
-    static public int sum(Set<Integer> factors) {
-        Iterator iterator = factors.iterator();
-        int sum = 0;
-        while (iterator.hasNext()) {
-            sum += (Integer) iterator.next();
-        }
-        return sum;
-    }
-
-    public boolean isPerfect() {
-        return sum(factors()) - number == number;
-    }
-
-    public boolean isAbundant() {
-        return sum(factors()) - number > number;
-    }
-
-    public boolean isDeficient() {
-        return sum(factors()) - number < number;
-    }
     public static void main(String[] args) {
-        ClassifierAlpha alpha1 = new ClassifierAlpha(10);
-        ClassifierAlpha alpha2 = new ClassifierAlpha(6);
+        ClassifierAlpha alpha = new ClassifierAlpha();
 
-        System.out.println(alpha1.isPerfect());
-        System.out.println(alpha2.isPerfect());
+        System.out.println(alpha.isPerfect.test(10));
+        System.out.println(alpha.isPerfect.test(6));
     }
+
 }
