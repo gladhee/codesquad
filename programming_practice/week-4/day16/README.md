@@ -76,3 +76,18 @@ private String getError() {
             .collect(Collectors.joining());
 }
 ```
+
+## 📝 회고
+
+## 📌 오늘의 학습 내용
+- QR code 디코딩 방식
+- Functional Interface를 이용한 람다식
+
+## 💡 좋았던 점
+- ✅ 다른 날보다 Functional 를 적재적소에 잘 사용한 느낌이 들어서 좋았다.
+
+## 🤔 아쉬웠던 점
+- ❌ 더 간결하게 쓸 수 있을 거 같은 생각을 많이 했는데 떠올린 방법들이 다 지저분해서 아쉬웠다.
+
+📝 개선할 점 & 내일의 목표
+- 더 간결하게 쓸 수 있는 방법을 생각해보자.
