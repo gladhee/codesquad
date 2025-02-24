@@ -35,6 +35,8 @@ public class QRDecode {
             decoded.add(value);
         }
 
+        QRValidator.validateDecode(decoded);
+
         return decoded;
     }
 
