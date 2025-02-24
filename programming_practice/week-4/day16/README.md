@@ -53,3 +53,26 @@
 - [ ] `Queue` 에서 데이터 Index 들을 꺼내서 8비트를 읽어서 **문자열**로 변환한다.
 - [ ] 시작 영역과 종료 영역이 규칙에 맞지 않으면 **빈 배열**을 리턴한다
 - [ ] **전용 코드값**으로 변환한다.
+
+## Mistake Party
+
+decode 를 에러까지 포함해서 결과에 담고 출력을 하다보니 `indexOutOfRange` 가 발생했다.
+데이터는 44까지만 표현할 수 있는 반면에 에러코드는 255까지 자유럽게 표현이 되기 떄문에 전용코드로 변환하는 과정에서 에러가 발생한 것이었다 .
+그래서 data 부분과 error 부분을 따로 분리해서 처리하니 에러가 발생하지 않았다.
+```java
+private String getData() {
+    int len = decode.get(LEN_INDEX);
+
+    return decode.subList(DATA_START, len + DATA_START)
+            .stream()
+            .map(Convertor::convertCode)
+            .collect(Collectors.joining());
+}
+
+private String getError() {
+    return decode.subList(ERROR_START, decode.size())
+            .stream()
+            .map(Convertor::convertHex)
+            .collect(Collectors.joining());
+}
+```
