@@ -35,7 +35,12 @@ public class QRDecode {
             decoded.add(value);
         }
 
-        QRValidator.validateDecode(decoded);
+        try {
+            QRValidator.validateDecode(decoded);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
 
         return decoded;
     }

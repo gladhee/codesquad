@@ -14,6 +14,10 @@ public class OutputView {
     }
 
     public void printDecode() {
+        if (decode.isEmpty()) {
+            return;
+        }
+
         String data = String.format("\"%s\"", getData());
         String error = String.format("\"0x%s\"", getError());
 
