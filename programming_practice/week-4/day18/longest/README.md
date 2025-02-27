@@ -1,0 +1,1 @@
+GLAD - longest-common-prefix (Leet Code)
