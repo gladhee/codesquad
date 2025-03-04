@@ -19,3 +19,20 @@
   - Pawn 의 생성자를 만들어 매개변수로 받은 값을 저장
 - [ ] refactoring
   - `create()` 메소드 내에 중복된 코드를 메소드로 추출
+
+## Step 2 - 2
+
+### 체스판 생성
+
+- [ ] `Pawn class` 클래스 변경
+  - `default constructor` 추가
+  - `white`와 `black`을 **상수**로 변경
+- [ ] `BoardTest class` 추가
+  - `Board` 를 생성
+  - `board` 안에 `Pawn`을 추가 시키고 현재 `piece`가 몇 개인지 확인
+  - `board` 안에 `piece`가 잘 들어갔는지 확인
+- [ ] 패키지 분리
+  - `chess` 패키지 생성
+  - `chess` 패키지 안에 `piece` 패키지 생성
+- [ ] extra test
+  -  `Board`안에 `Pawn` 외의 객체 생성시 예외 처리
