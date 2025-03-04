@@ -23,6 +23,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation libs.guava
+
+    // Use AssertJ for fluent assertions in tests.
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
