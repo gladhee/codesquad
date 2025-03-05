@@ -40,7 +40,6 @@ public class Board {
             board[BLACK_PAWN_ROW][i] = pawns.get(1).getRepresentation();
             board[WHITE_PAWN_ROW][i] = pawns.get(0).getRepresentation();
         }
-        print();
     }
 
     public void print() {
