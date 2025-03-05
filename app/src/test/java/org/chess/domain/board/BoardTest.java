@@ -17,12 +17,12 @@ public class BoardTest {
     }
 
     @Test
+    @DisplayName("보드 생성 후 Pawn을 추가하고 저장할 수 있어야 한다")
     public void create() throws Exception {
         Board board = new Board();
 
-        int count = 0;
-        verifyAddedPawnInBoard(board, whitePawn, ++count);
-        verifyAddedPawnInBoard(board, blackPawn, ++count);
+        verifyAddedPawnInBoard(board, whitePawn, 1);
+        verifyAddedPawnInBoard(board, blackPawn, 2);
     }
 
     private void verifyAddedPawnInBoard(Board board, Pawn pawn, int count) {
