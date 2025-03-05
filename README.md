@@ -36,3 +36,23 @@
   - `chess` 패키지 안에 `piece` 패키지 생성
 - [ ] extra test
   -  `Board`안에 `Pawn` 외의 객체 생성시 예외 처리
+
+## Step 2 - 3
+
+### 체스판 초기화
+
+- [ ] `Board` 클래스 기능 추가
+  - `initialize(): void` 메소드 추가
+    - `Board`에 `Pawn`을 초기화
+    - 검은색 `Pawn`은 대문자 `P`로 표시
+    - 흰색 `Pawn`은 소문자 `p`로 표시
+  - `print(): void` 메소드 추가
+    - `Board`에 있는 `Pawn`을 출력
+- [ ] `BoardTest` 클래스 추가
+  - `initialize` 메소드 테스트
+  - `print` 메소드 테스트
+- [ ] `main()` 메소드를 갖는 클래스 추가
+  - `Scanner`를 이용해 사용자로부터 입력을 받음
+    - `start` 입력시 체스 게임 시작하고 **현재 상태**를 출력
+    - `end` 입력시 체스 게임 종료
+    - `while`문을 이용해 반복
