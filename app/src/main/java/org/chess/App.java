@@ -3,12 +3,21 @@
  */
 package org.chess;
 
+import org.chess.domain.board.Board;
+import org.chess.console.Input;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        Input input = new Input();
+        Board board = new Board();
+
+        if (!input.suggestGame()) {
+            return;
+        }
+
+        board.initialize();
+        board.print();
     }
+
 }
