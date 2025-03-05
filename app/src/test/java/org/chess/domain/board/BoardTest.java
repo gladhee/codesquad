@@ -1,6 +1,6 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Pawn;
+import org.chess.domain.pieces.Piece;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.*;
@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardTest {
 
-    private Pawn whitePawn;
-    private Pawn blackPawn;
+    private Piece whitePiece;
+    private Piece blackPiece;
 
     @BeforeEach
     void setUp() {
-        this.whitePawn = new Pawn(Pawn.WHITE_COLOR, Pawn.WHITE_REPRESENTATION);
-        this.blackPawn = new Pawn(Pawn.BLACK_COLOR, Pawn.BLACK_REPRESENTATION);
+        this.whitePiece = new Piece(Piece.WHITE_COLOR, Piece.WHITE_REPRESENTATION);
+        this.blackPiece = new Piece(Piece.BLACK_COLOR, Piece.BLACK_REPRESENTATION);
     }
 
     @Test
@@ -22,14 +22,14 @@ class BoardTest {
     void create() throws Exception {
         Board board = new Board();
 
-        verifyAddedPawnInBoard(board, whitePawn, 1);
-        verifyAddedPawnInBoard(board, blackPawn, 2);
+        verifyAddedPawnInBoard(board, whitePiece, 1);
+        verifyAddedPawnInBoard(board, blackPiece, 2);
     }
 
-    void verifyAddedPawnInBoard(Board board, Pawn pawn, int count) {
-        board.add(pawn);
+    void verifyAddedPawnInBoard(Board board, Piece piece, int count) {
+        board.add(piece);
         assertEquals(count, board.size());
-        assertEquals(pawn, board.findPawn(count - 1));
+        assertEquals(piece, board.findPawn(count - 1));
     }
 
     @Test

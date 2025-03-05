@@ -1,6 +1,6 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Pawn;
+import org.chess.domain.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +13,17 @@ public class Board {
     private static final char EMPTY = '.';
 
     private final char[][] board;
-    private final List<Pawn> pawns;
+    private final List<Piece> pieces;
 
     public Board() {
         this.board = new char[BOARD_SIZE][BOARD_SIZE];
-        this.pawns = new ArrayList<>();
+        this.pieces = new ArrayList<>();
     }
 
     public void initialize() {
         for (int i = 0; i < 8; i++) {
-            pawns.add(new Pawn(Pawn.WHITE_COLOR, Pawn.WHITE_REPRESENTATION));
-            pawns.add(new Pawn(Pawn.BLACK_COLOR, Pawn.BLACK_REPRESENTATION));
+            pieces.add(new Piece(Piece.WHITE_COLOR, Piece.WHITE_REPRESENTATION));
+            pieces.add(new Piece(Piece.BLACK_COLOR, Piece.BLACK_REPRESENTATION));
         }
 
         initBoard();
@@ -37,8 +37,8 @@ public class Board {
         }
 
         for (int i = 0; i < 8; i++) {
-            board[BLACK_PAWN_ROW][i] = pawns.get(1).getRepresentation();
-            board[WHITE_PAWN_ROW][i] = pawns.get(0).getRepresentation();
+            board[BLACK_PAWN_ROW][i] = pieces.get(1).getRepresentation();
+            board[WHITE_PAWN_ROW][i] = pieces.get(0).getRepresentation();
         }
     }
 
@@ -53,16 +53,16 @@ public class Board {
         System.out.println(sb);
     }
 
-    public void add(Pawn pawn) {
-        pawns.add(pawn);
+    public void add(Piece piece) {
+        pieces.add(piece);
     }
 
     public int size() {
-        return pawns.size();
+        return pieces.size();
     }
 
-    public Pawn findPawn(int index) {
-        return pawns.get(index);
+    public Piece findPawn(int index) {
+        return pieces.get(index);
     }
 
     public String getPawnsResultWith(int row) {
