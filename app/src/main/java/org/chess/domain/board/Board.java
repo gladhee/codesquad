@@ -66,18 +66,10 @@ public class Board {
         return pawns.get(index);
     }
 
-    public String getWhitePawnsResult() {
+    public String getPawnsResultWith(int row) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            sb.append(board[WHITE_PAWN_ROW][i]);
-        }
-        return sb.toString();
-    }
-
-    public String getBlackPawnsResult() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            sb.append(board[BLACK_PAWN_ROW][i]);
+            sb.append(board[row][i]);
         }
         return sb.toString();
     }
