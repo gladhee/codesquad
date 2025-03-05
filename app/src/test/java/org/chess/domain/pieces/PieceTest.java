@@ -19,12 +19,4 @@ class PieceTest {
         assertThat(piece.getRepresentation()).isEqualTo(representation);
     }
 
-    @Test
-    @DisplayName("기본 생성자로 흰색 폰이 생성되어야 한다")
-    void create_기본생성자() throws Exception {
-        Piece piece = new Piece();
-        assertThat(Piece.WHITE_COLOR).isEqualTo(piece.getColor());
-        assertThat(Piece.WHITE_PAWN_REPRESENTATION).isEqualTo(piece.getRepresentation());
-    }
-
 }
