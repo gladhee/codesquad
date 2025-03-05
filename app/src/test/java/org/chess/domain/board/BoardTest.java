@@ -12,8 +12,8 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        this.whitePawn = new Pawn(Pawn.WHITE_COLOR);
-        this.blackPawn = new Pawn(Pawn.BLACK_COLOR);
+        this.whitePawn = new Pawn(Pawn.WHITE_COLOR, Pawn.WHITE_REPRESENTATION);
+        this.blackPawn = new Pawn(Pawn.BLACK_COLOR, Pawn.BLACK_REPRESENTATION);
     }
 
     @Test
