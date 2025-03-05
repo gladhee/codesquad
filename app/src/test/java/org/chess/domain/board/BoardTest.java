@@ -3,6 +3,7 @@ package org.chess.domain.board;
 import org.chess.domain.pieces.Pawn;
 import org.junit.jupiter.api.*;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardTest {
@@ -29,6 +30,15 @@ class BoardTest {
         board.add(pawn);
         assertEquals(count, board.size());
         assertEquals(pawn, board.findPawn(count - 1));
+    }
+
+    @Test
+    @DisplayName("보드 생성 후 폰을 초기화시 흰색 폰과 검은색 폰이 각각 8개씩 생성되어야 한다")
+    void initialize() throws Exception {
+        Board board = new Board();
+        board.initialize();
+        assertThat("pppppppp").isEqualTo(board.getWhitePawnsResult());
+        assertThat("PPPPPPPP").isEqualTo(board.getBlackPawnsResult());
     }
 
 }
