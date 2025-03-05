@@ -9,8 +9,8 @@ class PieceTest {
     @Test
     @DisplayName("흰색 폰이 생성되어야 한다")
     void create() {
-        verifyPawn(Piece.WHITE_COLOR, Piece.WHITE_REPRESENTATION);
-        verifyPawn(Piece.BLACK_COLOR, Piece.BLACK_REPRESENTATION);
+        verifyPawn(Piece.WHITE_COLOR, Piece.WHITE_PAWN_REPRESENTATION);
+        verifyPawn(Piece.BLACK_COLOR, Piece.BLACK_PAWN_REPRESENTATION);
     }
 
     void verifyPawn(final String color, final char representation) {
@@ -24,7 +24,7 @@ class PieceTest {
     void create_기본생성자() throws Exception {
         Piece piece = new Piece();
         assertThat(Piece.WHITE_COLOR).isEqualTo(piece.getColor());
-        assertThat(Piece.WHITE_REPRESENTATION).isEqualTo(piece.getRepresentation());
+        assertThat(Piece.WHITE_PAWN_REPRESENTATION).isEqualTo(piece.getRepresentation());
     }
 
 }

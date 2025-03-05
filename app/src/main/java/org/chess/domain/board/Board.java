@@ -22,8 +22,8 @@ public class Board {
 
     public void initialize() {
         for (int i = 0; i < 8; i++) {
-            pieces.add(new Piece(Piece.WHITE_COLOR, Piece.WHITE_REPRESENTATION));
-            pieces.add(new Piece(Piece.BLACK_COLOR, Piece.BLACK_REPRESENTATION));
+            pieces.add(new Piece(Piece.WHITE_COLOR, Piece.WHITE_PAWN_REPRESENTATION));
+            pieces.add(new Piece(Piece.BLACK_COLOR, Piece.BLACK_PAWN_REPRESENTATION));
         }
 
         initBoard();

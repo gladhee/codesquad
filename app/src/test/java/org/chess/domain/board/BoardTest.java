@@ -13,8 +13,8 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        this.whitePiece = new Piece(Piece.WHITE_COLOR, Piece.WHITE_REPRESENTATION);
-        this.blackPiece = new Piece(Piece.BLACK_COLOR, Piece.BLACK_REPRESENTATION);
+        this.whitePiece = new Piece(Piece.WHITE_COLOR, Piece.WHITE_PAWN_REPRESENTATION);
+        this.blackPiece = new Piece(Piece.BLACK_COLOR, Piece.BLACK_PAWN_REPRESENTATION);
     }
 
     @Test
