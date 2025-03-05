@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BoardTest {
+class BoardTest {
 
     private Pawn whitePawn;
     private Pawn blackPawn;
@@ -18,14 +18,14 @@ public class BoardTest {
 
     @Test
     @DisplayName("보드 생성 후 Pawn을 추가하고 저장할 수 있어야 한다")
-    public void create() throws Exception {
+    void create() throws Exception {
         Board board = new Board();
 
         verifyAddedPawnInBoard(board, whitePawn, 1);
         verifyAddedPawnInBoard(board, blackPawn, 2);
     }
 
-    private void verifyAddedPawnInBoard(Board board, Pawn pawn, int count) {
+    void verifyAddedPawnInBoard(Board board, Pawn pawn, int count) {
         board.add(pawn);
         assertEquals(count, board.size());
         assertEquals(pawn, board.findPawn(count - 1));
