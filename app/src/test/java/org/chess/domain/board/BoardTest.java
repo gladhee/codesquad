@@ -1,7 +1,6 @@
 package org.chess.domain.board;
 
 import org.chess.domain.pieces.Piece;
-import org.chess.utils.StringUtils;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.*;
@@ -28,14 +27,14 @@ class BoardTest {
         board.add(whitePawn);
 
         // then
-        assertThat(1).isEqualTo(board.size());
+        assertThat(1).isEqualTo(board.pieceCount());
         assertThat(whitePawn).isEqualTo(board.findPawn(0));
 
         // when
         board.add(blackPawn);
 
         // then
-        assertThat(2).isEqualTo(board.size());
+        assertThat(2).isEqualTo(board.pieceCount());
         assertThat(blackPawn).isEqualTo(board.findPawn(1));
     }
 

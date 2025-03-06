@@ -89,15 +89,26 @@ public class Board {
     }
 
     public void add(Piece piece) {
-        pieces.add(piece);
+        whitePieces.add(piece);
     }
 
-    public int size() {
-        return pieces.size();
+    public int pieceCount() {
+        return whitePieces.size() + blackPieces.size();
     }
 
     public Piece findPawn(int index) {
-        return pieces.get(index);
+        return whitePieces.get(index);
+    }
+
+    public String showBoard() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                sb.append(board[i][j]);
+            }
+            sb.append(StringUtils.NEWLINE);
+        }
+        return sb.toString();
     }
 
     public String getPawnsResultWith(int row) {
