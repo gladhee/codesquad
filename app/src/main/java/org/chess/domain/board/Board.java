@@ -4,14 +4,17 @@ import org.chess.domain.pieces.Piece;
 import org.chess.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
 
     private static final int BOARD_SIZE = 8;
-    private static final int WHITE_PAWN_ROW = 6;
-    private static final int BLACK_PAWN_ROW = 1;
     private static final char EMPTY = '.';
+    private static final int WHITE_MAIN_ROW = 7;
+    private static final int WHITE_PAWN_ROW = 6;
+    private static final int BLACK_MAIN_ROW = 0;
+    private static final int BLACK_PAWN_ROW = 1;
 
     private final char[][] board;
     private final List<Piece> whitePieces;
@@ -24,68 +27,58 @@ public class Board {
     }
 
     public void initialize() {
-        blackPieces.add(Piece.createBlackRook());
-        blackPieces.add(Piece.createBlackKnight());
-        blackPieces.add(Piece.createBlackBishop());
-        blackPieces.add(Piece.createBlackQuenn());
-        blackPieces.add(Piece.createBlackKing());
-        blackPieces.add(Piece.createBlackBishop());
-        blackPieces.add(Piece.createBlackKnight());
-        blackPieces.add(Piece.createBlackRook());
+        setupPieces();
+        initializeBoard();
+        placePiecesOnBoard();
+    }
 
-        for (int i = 0; i < 8; i++) {
+    private void setupPieces() {
+        blackPieces.addAll(List.of(
+                Piece.createBlackRook(), Piece.createBlackKnight(), Piece.createBlackBishop(),
+                Piece.createBlackQuenn(), Piece.createBlackKing(), Piece.createBlackBishop(),
+                Piece.createBlackKnight(), Piece.createBlackRook()
+        ));
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            whitePieces.add(Piece.createWhitePawn());
             blackPieces.add(Piece.createBlackPawn());
         }
 
-        for (int i = 0; i < 8; i++) {
-            whitePieces.add(Piece.createWhitePawn());
-        }
+        whitePieces.addAll(List.of(
+                Piece.createWhiteRook(), Piece.createWhiteKnight(), Piece.createWhiteBishop(),
+                Piece.createWhiteQuenn(), Piece.createWhiteKing(), Piece.createWhiteBishop(),
+                Piece.createWhiteKnight(), Piece.createWhiteRook()
+        ));
 
-        whitePieces.add(Piece.createWhiteRook());
-        whitePieces.add(Piece.createWhiteKnight());
-        whitePieces.add(Piece.createWhiteBishop());
-        whitePieces.add(Piece.createWhiteQuenn());
-        whitePieces.add(Piece.createWhiteKing());
-        whitePieces.add(Piece.createWhiteBishop());
-        whitePieces.add(Piece.createWhiteKnight());
-        whitePieces.add(Piece.createWhiteRook());
-
-        initBoard();
     }
 
-    private void initBoard() {
+    private void initializeBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 board[i][j] = EMPTY;
             }
         }
+    }
 
-        for (int i = 0; i < 8; i++) {
-            board[0][i] = blackPieces.get(i).getRepresentation();
-        }
-
-        for (int i = 0; i < 8; i++) {
-            board[1][i] = blackPieces.get(i + 8).getRepresentation();
-        }
-
-        for (int i = 0; i < 8; i++) {
-            board[6][i] = whitePieces.get(i).getRepresentation();
-        }
-
-        for (int i = 0; i < 8; i++) {
-            board[7][i] = whitePieces.get(i + 8).getRepresentation();
+    private void placePiecesOnBoard() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            board[BLACK_MAIN_ROW][i] = blackPieces.get(i).getRepresentation();
+            board[BLACK_PAWN_ROW][i] = blackPieces.get(i + BOARD_SIZE).getRepresentation();
+            board[WHITE_PAWN_ROW][i] = whitePieces.get(i).getRepresentation();
+            board[WHITE_MAIN_ROW][i] = whitePieces.get(i + BOARD_SIZE).getRepresentation();
         }
     }
 
     public void print() {
+        System.out.println(showBoard());
+    }
+
+    public String showBoard() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(board[i][j]);
-            }
-            sb.append(StringUtils.NEWLINE);
+        for (char[] row : board) {
+            sb.append(row).append(StringUtils.NEWLINE);
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 
     public void add(Piece piece) {
@@ -100,23 +93,8 @@ public class Board {
         return whitePieces.get(index);
     }
 
-    public String showBoard() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(board[i][j]);
-            }
-            sb.append(StringUtils.NEWLINE);
-        }
-        return sb.toString();
-    }
-
     public String getPawnsResultWith(int row) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            sb.append(board[row][i]);
-        }
-        return sb.toString();
+        return new String(board[row]);
     }
 
 }
