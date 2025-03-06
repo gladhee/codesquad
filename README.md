@@ -56,3 +56,27 @@
     - `start` 입력시 체스 게임 시작하고 **현재 상태**를 출력
     - `end` 입력시 체스 게임 종료
     - `while`문을 이용해 반복
+
+## Step 2 - 4
+
+### 모든 기물 배치하기
+
+- [ ] `\n` 코드 리펙토링
+  - `StringUtils` 클래스 생성
+  - `StringUtils` 클래스 안에 `NEWLINE` 상수 추가
+  - `System.getProperty("line.separator")`를 이용해 `\n` 대신 `NEWLINE` 사용
+  - `private constructor` 추가
+- [ ] `Pawn` 클래스 rename
+  - `Pawn` 클래스를 `Piece`로 변경
+  - `color`, `name` 필드 추가
+  - 모든 필드에 `final` 추가
+  - `Piece` 생성자를 팩토리 메소드로 변경
+    - _ex_
+      - `Piece.createWhitePawn()`
+      - `Piece.createBlackPawn()`
+      - `Piece.createWhiteRook()` ...
+  - 검은 말과 흰 말을 구분하는 메소드 추
+- [ ] `PieceTest`
+  - 여러 `Piece`를 생성하고 `color`, `name`이 잘 들어갔는지 확인
+- [ ] `Board` 클래스 변경
+  - `initialize()` 메소드를 이용해 모든 `Piece`를 초기화
