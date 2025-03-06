@@ -1,8 +1,6 @@
 package org.chess.domain.pieces;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSources;
 
 import static org.assertj.core.api.Assertions.*;
 

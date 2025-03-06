@@ -4,7 +4,6 @@ import org.chess.domain.pieces.Piece;
 import org.chess.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Board {
