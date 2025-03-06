@@ -1,6 +1,8 @@
 package org.chess.domain.pieces;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSources;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -26,6 +28,28 @@ class PieceTest {
     private void verifyPiece(final Piece piece, final String color, final char representation) {
         assertThat(piece.getColor()).isEqualTo(color);
         assertThat(piece.getRepresentation()).isEqualTo(representation);
+    }
+
+    @Test
+    @DisplayName("White 로 생성한 Piece의 색상은 White이어야 한다")
+    void 흰색_기물_생성시_색상_검증_테스트() {
+        assertThat(Piece.createWhitePawn().isWhite()).isTrue();
+        assertThat(Piece.createWhiteQuenn().isWhite()).isTrue();
+        assertThat(Piece.createWhiteKing().isWhite()).isTrue();
+        assertThat(Piece.createWhiteRook().isWhite()).isTrue();
+        assertThat(Piece.createWhiteBishop().isWhite()).isTrue();
+        assertThat(Piece.createWhiteKnight().isWhite()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Black으로 생성한 Piece의 색상은 Black이어야 한다")
+    void 검은색_기물_생성시_색상_검증_테스트() {
+        assertThat(Piece.createBlackPawn().isBlack()).isTrue();
+        assertThat(Piece.createBlackQuenn().isBlack()).isTrue();
+        assertThat(Piece.createBlackKing().isBlack()).isTrue();
+        assertThat(Piece.createBlackRook().isBlack()).isTrue();
+        assertThat(Piece.createBlackBishop().isBlack()).isTrue();
+        assertThat(Piece.createBlackKnight().isBlack()).isTrue();
     }
 
 }
