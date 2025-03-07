@@ -8,6 +8,9 @@ import org.chess.console.Input;
 
 public class App {
 
+    private static final int SRC = 0;
+    private static final int DEST = 1;
+
     public static void main(String[] args) {
         Input input = new Input();
         Board board = new Board();
@@ -18,6 +21,11 @@ public class App {
 
         board.initialize();
         board.print();
+        while (true) {
+            String[] moves = input.getMoves();
+            board.move(moves[SRC], moves[DEST]);
+            board.print();
+        }
     }
 
 }

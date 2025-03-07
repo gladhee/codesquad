@@ -1,5 +1,7 @@
 package org.chess.console;
 
+import org.chess.utils.StringUtils;
+
 import java.util.Scanner;
 
 public class Input {
@@ -23,6 +25,22 @@ public class Input {
                     return true;
                 }
                 throw new IllegalArgumentException("only start and exit");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public String[] getMoves() {
+        System.out.println("Enter Move");
+        while (true) {
+            try {
+                System.out.println("Example: move a2 a3");
+                String cmd = scanner.nextLine();
+
+                if (cmd.startsWith("move ")) {
+                    return StringUtils.getMovePositions(cmd);
+                }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
