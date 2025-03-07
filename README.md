@@ -136,9 +136,9 @@
 
 - [x] `Board` 클래스에 `move(from : String, to : String): void` 메소드 추가
   - `from` 위치의 기물을 `to` 위치로 이동
-- [ ] `BoardTest` 클래스 추가
+- [x] `BoardTest` 클래스 추가
   - `move` 메소드 테스트
-- [ ] `main()`문 변경
+- [x] `main()`문 변경
   - `move` 입력시 `from`, `to` 위치를 입력 받아 `Board` 클래스의 `move` 메소드 호출
   - `move` 입력시 이동한 후의 **현재 상태**를 출력
   - `String,startsWith()` 메소드 활용
