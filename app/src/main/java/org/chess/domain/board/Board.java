@@ -89,7 +89,7 @@ public class Board {
     public void move(String position, Piece piece) {
         Position pos = Position.of(position);
 
-        board.get(pos.y()).getPieces().set(pos.x(), piece);
+        board.get(pos.y()).placePieceAt(pos.x(), piece);
     }
 
     public int pieceCount() {
@@ -97,10 +97,9 @@ public class Board {
     }
 
     public int countPieces(Piece.Color color, Piece.Type type) {
-        return (int) board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color && piece.getType() == type)
-                .count();
+        return board.stream()
+                .mapToInt(rank -> rank.countPieces(color, type))
+                .sum();
     }
 
     public Piece findPawn(int index) {
@@ -110,7 +109,7 @@ public class Board {
     public Piece findPiece(String position) {
         Position pos = Position.of(position);
 
-        return board.get(pos.y()).getPieces().get(pos.x());
+        return board.get(pos.y()).getPieceAt(pos.x());
     }
 
     public String getPawnsResultWith(int row) {
@@ -119,24 +118,20 @@ public class Board {
 
     public double calculatePoint(Piece.Color color) {
         return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
-                .mapToDouble(Piece::getPoint)
+                .mapToDouble(rank -> rank.calculatePoints(color))
                 .sum();
     }
 
     public List<Piece> sortPiecesByAscending(Piece.Color color) {
         return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
+                .flatMap(rank -> rank.getPiecesByColor(color).stream())
                 .sorted(Comparator.comparingDouble(Piece::getPoint))
                 .collect(Collectors.toList());
     }
 
     public List<Piece> sortPiecesByDescending(Piece.Color color) {
         return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
+                .flatMap(rank -> rank.getPiecesByColor(color).stream())
                 .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
                 .collect(Collectors.toList());
     }

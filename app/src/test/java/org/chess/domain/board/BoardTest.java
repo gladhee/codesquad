@@ -147,7 +147,7 @@ class BoardTest {
         assertThat(board.calculatePoint(Piece.Color.BLACK)).isCloseTo(15.0, within(0.01));
         assertThat(board.calculatePoint(Piece.Color.WHITE)).isCloseTo(7.0, within(0.01));
 
-        System.out.println(board.showBoard());
+//        System.out.println(board.showBoard());
     }
 
     @Test
