@@ -208,6 +208,22 @@ class BoardTest {
         compare(actualWhitePiecesWithAsc, expectedWhitePiecesWithAsc);
     }
 
+    @Test
+    @DisplayName("from 에서 to 로 기물을 이동할 수 있어야 한다")
+    void 기물_이동_테스트() {
+        // given
+        Board board = new Board();
+        board.initialize();
+
+        // when
+        String srcPos = "b2";
+        String destPos = "b4";
+        board.move(srcPos, destPos);
+
+        assertThat(Piece.createWhite(Piece.Type.PAWN)).isEqualTo(board.findPiece(destPos));
+        assertThat(Piece.createBlankPiece()).isEqualTo(board.findPiece(srcPos));
+    }
+
     private void addPiece(Board board, String Position, Piece piece) {
         board.move(Position, piece);
     }
