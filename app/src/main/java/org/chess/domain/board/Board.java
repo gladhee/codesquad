@@ -92,6 +92,16 @@ public class Board {
         board.get(pos.y()).placePieceAt(pos.x(), piece);
     }
 
+    public void move(String src, String dest) {
+        Position srcPos = Position.of(src);
+        Position destPos = Position.of(dest);
+
+        Piece piece = board.get(srcPos.y()).getPieceAt(srcPos.x());
+
+        board.get(srcPos.y()).placePieceAt(srcPos.x(), Piece.createBlankPiece());
+        board.get(destPos.y()).placePieceAt(destPos.x(), piece);
+    }
+
     public int pieceCount() {
         return whitePieces.size() + blackPieces.size();
     }
