@@ -4,7 +4,10 @@ import org.chess.domain.pieces.Piece;
 import org.chess.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Board {
 
@@ -15,57 +18,56 @@ public class Board {
     private static final int BLACK_MAIN_ROW = 0;
     private static final int BLACK_PAWN_ROW = 1;
 
-    private final char[][] board;
+    private final List<Rank> board;
     private final List<Piece> whitePieces;
     private final List<Piece> blackPieces;
 
     public Board() {
-        this.board = new char[BOARD_SIZE][BOARD_SIZE];
+        this.board = new ArrayList<>();
         this.whitePieces = new ArrayList<>();
         this.blackPieces = new ArrayList<>();
     }
 
     public void initialize() {
         setupPieces();
-        initializeBoard();
+        initializeEmptyBoard();
         placePiecesOnBoard();
     }
 
     private void setupPieces() {
         blackPieces.addAll(List.of(
-                Piece.createBlackRook(), Piece.createBlackKnight(), Piece.createBlackBishop(),
-                Piece.createBlackQuenn(), Piece.createBlackKing(), Piece.createBlackBishop(),
-                Piece.createBlackKnight(), Piece.createBlackRook()
+                Piece.createBlack(Piece.Type.ROOK), Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.BISHOP),
+                Piece.createBlack(Piece.Type.QUEEN), Piece.createBlack(Piece.Type.KING), Piece.createBlack(Piece.Type.BISHOP),
+                Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.ROOK)
         ));
 
         for (int i = 0; i < BOARD_SIZE; i++) {
-            whitePieces.add(Piece.createWhitePawn());
-            blackPieces.add(Piece.createBlackPawn());
+            whitePieces.add(Piece.createWhite(Piece.Type.PAWN));
+            blackPieces.add(Piece.createBlack(Piece.Type.PAWN));
         }
 
         whitePieces.addAll(List.of(
-                Piece.createWhiteRook(), Piece.createWhiteKnight(), Piece.createWhiteBishop(),
-                Piece.createWhiteQuenn(), Piece.createWhiteKing(), Piece.createWhiteBishop(),
-                Piece.createWhiteKnight(), Piece.createWhiteRook()
+                Piece.createWhite(Piece.Type.ROOK), Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.BISHOP),
+                Piece.createWhite(Piece.Type.QUEEN), Piece.createWhite(Piece.Type.KING), Piece.createWhite(Piece.Type.BISHOP),
+                Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.ROOK)
         ));
 
     }
 
-    private void initializeBoard() {
+    public void initializeEmptyBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = EMPTY;
-            }
+            List<Piece> emptyPieces = IntStream.range(0, BOARD_SIZE)
+                    .mapToObj(j -> Piece.createBlankPiece())
+                    .collect(Collectors.toList());
+            board.add(Rank.of(emptyPieces));
         }
     }
 
     private void placePiecesOnBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            board[BLACK_MAIN_ROW][i] = blackPieces.get(i).getRepresentation();
-            board[BLACK_PAWN_ROW][i] = blackPieces.get(i + BOARD_SIZE).getRepresentation();
-            board[WHITE_PAWN_ROW][i] = whitePieces.get(i).getRepresentation();
-            board[WHITE_MAIN_ROW][i] = whitePieces.get(i + BOARD_SIZE).getRepresentation();
-        }
+        board.set(WHITE_PAWN_ROW, Rank.of(whitePieces.subList(0, 8)));
+        board.set(WHITE_MAIN_ROW, Rank.of(whitePieces.subList(8, 16)));
+        board.set(BLACK_MAIN_ROW, Rank.of(blackPieces.subList(0, 8)));
+        board.set(BLACK_PAWN_ROW, Rank.of(blackPieces.subList(8, 16)));
     }
 
     public void print() {
@@ -74,8 +76,8 @@ public class Board {
 
     public String showBoard() {
         StringBuilder sb = new StringBuilder();
-        for (char[] row : board) {
-            sb.append(row).append(StringUtils.NEWLINE);
+        for (Rank rank : board) {
+            sb.append(rank).append(StringUtils.NEWLINE);
         }
         return sb.toString();
     }
@@ -84,16 +86,59 @@ public class Board {
         whitePieces.add(piece);
     }
 
+    public void move(String position, Piece piece) {
+        Position pos = Position.of(position);
+
+        board.get(pos.y()).getPieces().set(pos.x(), piece);
+    }
+
     public int pieceCount() {
         return whitePieces.size() + blackPieces.size();
+    }
+
+    public int countPieces(Piece.Color color, Piece.Type type) {
+        return (int) board.stream()
+                .flatMap(rank -> rank.getPieces().stream())
+                .filter(piece -> piece.getColor() == color && piece.getType() == type)
+                .count();
     }
 
     public Piece findPawn(int index) {
         return whitePieces.get(index);
     }
 
+    public Piece findPiece(String position) {
+        Position pos = Position.of(position);
+
+        return board.get(pos.y()).getPieces().get(pos.x());
+    }
+
     public String getPawnsResultWith(int row) {
-        return new String(board[row]);
+        return board.get(row).toString();
+    }
+
+    public double calculatePoint(Piece.Color color) {
+        return board.stream()
+                .flatMap(rank -> rank.getPieces().stream())
+                .filter(piece -> piece.getColor() == color)
+                .mapToDouble(Piece::getPoint)
+                .sum();
+    }
+
+    public List<Piece> sortPiecesByAscending(Piece.Color color) {
+        return board.stream()
+                .flatMap(rank -> rank.getPieces().stream())
+                .filter(piece -> piece.getColor() == color)
+                .sorted(Comparator.comparingDouble(Piece::getPoint))
+                .collect(Collectors.toList());
+    }
+
+    public List<Piece> sortPiecesByDescending(Piece.Color color) {
+        return board.stream()
+                .flatMap(rank -> rank.getPieces().stream())
+                .filter(piece -> piece.getColor() == color)
+                .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
+                .collect(Collectors.toList());
     }
 
 }

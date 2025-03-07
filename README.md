@@ -80,3 +80,52 @@
   - 여러 `Piece`를 생성하고 `color`, `name`이 잘 들어갔는지 확인
 - [ ] `Board` 클래스 변경
   - `initialize()` 메소드를 이용해 모든 `Piece`를 초기화
+
+## Step 2 - 5
+
+### 기물 위치 부여 및 점수계산
+
+- [ ] `Piece` 클래스 enum 추가
+  - `Color` enum 추가
+    - `WHITE`, `BLACK`, `NOCOLOR` 추가
+  - `Type` enum 추가
+    - `PAWN`, `ROOK`, `KNIGHT`, `BISHOP`, `QUEEN`, `KING`, `NO_PIECE` 추가
+    - 식별 문자 함께 관리
+    - 식별 문자는 **소문자**로만 관리
+  - 기존 **상수 값 제거**
+- [ ] `Piece` 클래스 `enum` 이용한 팩토리 메소드 리펙토링
+  - `REPRESANTATION` 을 `Type` enum으로 변경
+  - `createWhite(type: Type): Piece`, `createBlack(type: Type): Piece` 메소드 통합 관리
+- [ ] `Board` 클래스 변경
+  - `initialize()` 메소드에서 빈 공간도 `Piece.createBlank()`로 초기화
+  - `Rank(row)` 를 기반으로 `List<Piece>` 관리 로직 수정
+- [ ] 기물과 색에 해당하는 **기물의 개수**를 반환
+  - `Board` 클래스에 `countPieceByColorAndType(color: Color, type: Type): int` 메소드 추가
+  - _ex_
+    - 검은 폰의 개수: `countPieceByColorAndType(Color.BLACK, Type.PAWN): int`
+- [ ] 주어진 위치의 기물 조회 로직 작성
+  - `Board` 클래스에 `findPieceByPosition(position : String): Piece` 메소드 추가
+  - `row`는 `1~8`, `column`은 `a~h`로 관리
+  - 좌측 상단이 `(8, a)`, 우측 하단이 `(1, h)`로 관리
+  - _ex_
+    - `findPieceByPosition("a1"): Piece`
+- [ ] 임의의 기물을 **체스판 위에 추가**
+  - `Board` 클래스에 `move(to : String, piece : Piece): void` 메소드 추가
+  - test 하기 위해서 **빈 체스판** 생성 후 `move` 메소드로 기물 추가
+  - 기존 `List<Piece>` 에서 제거 후 새로운 Piece 로 변경하는 경우 `set()` 메소드 사용
+- [ ] **점수 계산** 로직 추가
+  - `Board` 클래스에 `calculatePoint(color: Color): double` 메소드 추가
+  - 각 기물의 점수는 다음과 같음
+    - 폰: **1.0**
+    - 룩: **5.0**
+    - 나이트: **2.5**
+    - 비숍: **3.0**
+    - 퀸: **9.0**
+    - 킹: **0.0**
+  - _ex_
+    - 흰 폰의 점수: `calculateScore(Color.WHITE): double`
+  - 한 번에 **한 쪽의 점수만** 계산
+  - 검은 색과 흰 색 기물을 구분해서 **점수가 높은 순서로 정렬**한다
+  - 각 색에 해당하는 모든 기물을 **`Collection`**에 담아서 **정렬**한다
+- [ ] 리펙토링
+  - **인터페이스**를 이용해 추출

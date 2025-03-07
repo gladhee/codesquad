@@ -13,23 +13,33 @@ class PieceTest {
     @Test
     @DisplayName("팩토리 메소드에 의해 맞는 색상과 표현을 가진 Piece를 생성할 수 있어야 한다")
     void Piece_생성_테스트() {
-        verifyPiece(Piece.createWhitePawn(), Piece.WHITE_COLOR, Piece.WHITE_PAWN_REPRESENTATION);
-        verifyPiece(Piece.createBlackPawn(), Piece.BLACK_COLOR, Piece.BLACK_PAWN_REPRESENTATION);
-        verifyPiece(Piece.createWhiteQuenn(), Piece.WHITE_COLOR, Piece.WHITE_QUEEN_REPRESENTATION);
-        verifyPiece(Piece.createBlackQuenn(), Piece.BLACK_COLOR, Piece.BLACK_QUEEN_REPRESENTATION);
-        verifyPiece(Piece.createWhiteKing(), Piece.WHITE_COLOR, Piece.WHITE_KING_REPRESENTATION);
-        verifyPiece(Piece.createBlackKing(), Piece.BLACK_COLOR, Piece.BLACK_KING_REPRESENTATION);
-        verifyPiece(Piece.createWhiteRook(), Piece.WHITE_COLOR, Piece.WHITE_ROOK_REPRESENTATION);
-        verifyPiece(Piece.createBlackRook(), Piece.BLACK_COLOR, Piece.BLACK_ROOK_REPRESENTATION);
-        verifyPiece(Piece.createWhiteBishop(), Piece.WHITE_COLOR, Piece.WHITE_BISHOP_REPRESENTATION);
-        verifyPiece(Piece.createBlackBishop(), Piece.BLACK_COLOR, Piece.BLACK_BISHOP_REPRESENTATION);
-        verifyPiece(Piece.createWhiteKnight(), Piece.WHITE_COLOR, Piece.WHITE_KNIGHT_REPRESENTATION);
-        verifyPiece(Piece.createBlackKnight(), Piece.BLACK_COLOR, Piece.BLACK_KNIGHT_REPRESENTATION);
+        verifyPiece(Piece.createWhite(Piece.Type.PAWN), Piece.createBlack(Piece.Type.PAWN), Piece.Type.PAWN);
+        verifyPiece(Piece.createWhite(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.KNIGHT), Piece.Type.KNIGHT);
+        verifyPiece(Piece.createWhite(Piece.Type.ROOK), Piece.createBlack(Piece.Type.ROOK), Piece.Type.ROOK);
+        verifyPiece(Piece.createWhite(Piece.Type.BISHOP), Piece.createBlack(Piece.Type.BISHOP), Piece.Type.BISHOP);
+        verifyPiece(Piece.createWhite(Piece.Type.QUEEN), Piece.createBlack(Piece.Type.QUEEN), Piece.Type.QUEEN);
+        verifyPiece(Piece.createWhite(Piece.Type.KING), Piece.createBlack(Piece.Type.KING), Piece.Type.KING);
+
+        Piece blank = Piece.createBlankPiece();
+        assertThat(blank.isWhite()).isFalse();
+        assertThat(blank.isBlack()).isFalse();
+        assertThat(blank.getType()).isEqualTo(Piece.Type.NO_PIECE);
     }
 
-    private void verifyPiece(final Piece piece, final String color, final char representation) {
-        assertThat(piece.getColor()).isEqualTo(color);
-        assertThat(piece.getRepresentation()).isEqualTo(representation);
+    private void verifyPiece(final Piece whitePiece, final Piece blackPiece, final Piece.Type type) {
+        assertThat(whitePiece.isWhite()).isTrue();
+        assertThat(whitePiece.getType()).isEqualTo(type);
+
+
+        assertThat(blackPiece.isBlack()).isTrue();
+        assertThat(blackPiece.getType()).isEqualTo(type);
+    }
+
+    @Test
+    @DisplayName("Piece의 표현을 검은 색과 흰 색에 따라 반환해야 한다")
+    void enum_Type_표현_반환_테스트() {
+        assertThat('p').isEqualTo(Piece.Type.PAWN.getWhiteType());
+        assertThat('P').isEqualTo(Piece.Type.PAWN.getBlackType());
     }
 
     @ParameterizedTest
@@ -48,23 +58,23 @@ class PieceTest {
 
     static Stream<Piece> whitePiecesProvider() {
         return Stream.of(
-                Piece.createWhitePawn(),
-                Piece.createWhiteQuenn(),
-                Piece.createWhiteKing(),
-                Piece.createWhiteRook(),
-                Piece.createWhiteBishop(),
-                Piece.createWhiteKnight()
+                Piece.createWhite(Piece.Type.PAWN),
+                Piece.createWhite(Piece.Type.QUEEN),
+                Piece.createWhite(Piece.Type.KING),
+                Piece.createWhite(Piece.Type.ROOK),
+                Piece.createWhite(Piece.Type.BISHOP),
+                Piece.createWhite(Piece.Type.KNIGHT)
         );
     }
 
     static Stream<Piece> blackPiecesProvider() {
         return Stream.of(
-                Piece.createBlackPawn(),
-                Piece.createBlackQuenn(),
-                Piece.createBlackKing(),
-                Piece.createBlackRook(),
-                Piece.createBlackBishop(),
-                Piece.createBlackKnight()
+                Piece.createBlack(Piece.Type.PAWN),
+                Piece.createBlack(Piece.Type.QUEEN),
+                Piece.createBlack(Piece.Type.KING),
+                Piece.createBlack(Piece.Type.ROOK),
+                Piece.createBlack(Piece.Type.BISHOP),
+                Piece.createBlack(Piece.Type.KNIGHT)
         );
     }
 
