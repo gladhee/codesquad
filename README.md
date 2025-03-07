@@ -12,46 +12,46 @@
 
 ### 체스 프로젝트 시작
 
-- [ ] PawnTest 클래스 생성
+- [x] PawnTest 클래스 생성
   - 매개변수 생성자를 이용해 Pawn 생성
   - 생성된 Pawn 이 매개변수로 넣은 값이 잘 들어갔는지 확인
-- [ ] Pawn 클래스 생성
+- [x] Pawn 클래스 생성
   - Pawn 의 생성자를 만들어 매개변수로 받은 값을 저장
-- [ ] refactoring
+- [x] refactoring
   - `create()` 메소드 내에 중복된 코드를 메소드로 추출
 
 ## Step 2 - 2
 
 ### 체스판 생성
 
-- [ ] `Pawn class` 클래스 변경
+- [x] `Pawn class` 클래스 변경
   - `default constructor` 추가
   - `white`와 `black`을 **상수**로 변경
-- [ ] `BoardTest class` 추가
+- [x] `BoardTest class` 추가
   - `Board` 를 생성
   - `board` 안에 `Pawn`을 추가 시키고 현재 `piece`가 몇 개인지 확인
   - `board` 안에 `piece`가 잘 들어갔는지 확인
-- [ ] 패키지 분리
+- [x] 패키지 분리
   - `chess` 패키지 생성
   - `chess` 패키지 안에 `piece` 패키지 생성
-- [ ] extra test
+- [x] extra test
   -  `Board`안에 `Pawn` 외의 객체 생성시 예외 처리
 
 ## Step 2 - 3
 
 ### 체스판 초기화
 
-- [ ] `Board` 클래스 기능 추가
+- [x] `Board` 클래스 기능 추가
   - `initialize(): void` 메소드 추가
     - `Board`에 `Pawn`을 초기화
     - 검은색 `Pawn`은 대문자 `P`로 표시
     - 흰색 `Pawn`은 소문자 `p`로 표시
   - `print(): void` 메소드 추가
     - `Board`에 있는 `Pawn`을 출력
-- [ ] `BoardTest` 클래스 추가
+- [x] `BoardTest` 클래스 추가
   - `initialize` 메소드 테스트
   - `print` 메소드 테스트
-- [ ] `main()` 메소드를 갖는 클래스 추가
+- [x] `main()` 메소드를 갖는 클래스 추가
   - `Scanner`를 이용해 사용자로부터 입력을 받음
     - `start` 입력시 체스 게임 시작하고 **현재 상태**를 출력
     - `end` 입력시 체스 게임 종료
@@ -61,12 +61,12 @@
 
 ### 모든 기물 배치하기
 
-- [ ] `\n` 코드 리펙토링
+- [x] `\n` 코드 리펙토링
   - `StringUtils` 클래스 생성
   - `StringUtils` 클래스 안에 `NEWLINE` 상수 추가
   - `System.getProperty("line.separator")`를 이용해 `\n` 대신 `NEWLINE` 사용
   - `private constructor` 추가
-- [ ] `Pawn` 클래스 rename
+- [x] `Pawn` 클래스 rename
   - `Pawn` 클래스를 `Piece`로 변경
   - `color`, `name` 필드 추가
   - 모든 필드에 `final` 추가
@@ -76,16 +76,16 @@
       - `Piece.createBlackPawn()`
       - `Piece.createWhiteRook()` ...
   - 검은 말과 흰 말을 구분하는 메소드 추
-- [ ] `PieceTest`
+- [x] `PieceTest`
   - 여러 `Piece`를 생성하고 `color`, `name`이 잘 들어갔는지 확인
-- [ ] `Board` 클래스 변경
+- [x] `Board` 클래스 변경
   - `initialize()` 메소드를 이용해 모든 `Piece`를 초기화
 
 ## Step 2 - 5
 
 ### 기물 위치 부여 및 점수계산
 
-- [ ] `Piece` 클래스 enum 추가
+- [x] `Piece` 클래스 enum 추가
   - `Color` enum 추가
     - `WHITE`, `BLACK`, `NOCOLOR` 추가
   - `Type` enum 추가
@@ -93,27 +93,27 @@
     - 식별 문자 함께 관리
     - 식별 문자는 **소문자**로만 관리
   - 기존 **상수 값 제거**
-- [ ] `Piece` 클래스 `enum` 이용한 팩토리 메소드 리펙토링
+- [x] `Piece` 클래스 `enum` 이용한 팩토리 메소드 리펙토링
   - `REPRESANTATION` 을 `Type` enum으로 변경
   - `createWhite(type: Type): Piece`, `createBlack(type: Type): Piece` 메소드 통합 관리
-- [ ] `Board` 클래스 변경
+- [x] `Board` 클래스 변경
   - `initialize()` 메소드에서 빈 공간도 `Piece.createBlank()`로 초기화
   - `Rank(row)` 를 기반으로 `List<Piece>` 관리 로직 수정
-- [ ] 기물과 색에 해당하는 **기물의 개수**를 반환
+- [x] 기물과 색에 해당하는 **기물의 개수**를 반환
   - `Board` 클래스에 `countPieceByColorAndType(color: Color, type: Type): int` 메소드 추가
   - _ex_
     - 검은 폰의 개수: `countPieceByColorAndType(Color.BLACK, Type.PAWN): int`
-- [ ] 주어진 위치의 기물 조회 로직 작성
+- [x] 주어진 위치의 기물 조회 로직 작성
   - `Board` 클래스에 `findPieceByPosition(position : String): Piece` 메소드 추가
   - `row`는 `1~8`, `column`은 `a~h`로 관리
   - 좌측 상단이 `(8, a)`, 우측 하단이 `(1, h)`로 관리
   - _ex_
     - `findPieceByPosition("a1"): Piece`
-- [ ] 임의의 기물을 **체스판 위에 추가**
+- [x] 임의의 기물을 **체스판 위에 추가**
   - `Board` 클래스에 `move(to : String, piece : Piece): void` 메소드 추가
   - test 하기 위해서 **빈 체스판** 생성 후 `move` 메소드로 기물 추가
   - 기존 `List<Piece>` 에서 제거 후 새로운 Piece 로 변경하는 경우 `set()` 메소드 사용
-- [ ] **점수 계산** 로직 추가
+- [x] **점수 계산** 로직 추가
   - `Board` 클래스에 `calculatePoint(color: Color): double` 메소드 추가
   - 각 기물의 점수는 다음과 같음
     - 폰: **1.0**
@@ -127,5 +127,5 @@
   - 한 번에 **한 쪽의 점수만** 계산
   - 검은 색과 흰 색 기물을 구분해서 **점수가 높은 순서로 정렬**한다
   - 각 색에 해당하는 모든 기물을 **`Collection`**에 담아서 **정렬**한다
-- [ ] 리펙토링
+- [x] 리펙토링
   - **인터페이스**를 이용해 추출
