@@ -4,20 +4,6 @@ import java.util.Objects;
 
 public class Piece {
 
-    public enum Color {
-        WHITE("white"), BLACK("black"), NOCOLOR("null");
-
-        private final String color;
-
-        Color(String color) {
-            this.color = color;
-        }
-
-        public String getColor() {
-            return color;
-        }
-    }
-
     public enum Type {
         PAWN('p', 1.0),
         ROOK('r', 5.0),

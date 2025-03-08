@@ -1,5 +1,6 @@
 package org.chess.domain.board;
 
+import org.chess.domain.pieces.Color;
 import org.chess.domain.pieces.Piece;
 import org.chess.utils.StringUtils;
 
@@ -67,13 +68,13 @@ public class Board {
         return board.getOrDefault(pos, Piece.createBlankPiece());
     }
 
-    public int countPieces(Piece.Color color, Piece.Type type) {
+    public int countPieces(Color color, Piece.Type type) {
         return (int) board.values().stream()
                 .filter(piece -> piece.isSameColor(color) && piece.isSameType(type))
                 .count();
     }
 
-    public double calculatePoint(Piece.Color color) {
+    public double calculatePoint(Color color) {
         return board.values().stream()
                 .filter(piece -> piece.isSameColor(color))
                 .mapToDouble(Piece::getPoint)
@@ -86,7 +87,7 @@ public class Board {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 Piece piece = board.get(Position.of(y, x));
-                sb.append(piece.isSameColor(Piece.Color.WHITE) ? piece.getType().getWhiteType() : piece.getType().getBlackType());
+                sb.append(piece.isSameColor(Color.WHITE) ? piece.getType().getWhiteType() : piece.getType().getBlackType());
             }
             sb.append(StringUtils.NEWLINE);
         }

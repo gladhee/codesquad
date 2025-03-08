@@ -1,9 +1,8 @@
 package org.chess.domain.board;
 
+import org.chess.domain.pieces.Color;
 import org.chess.domain.pieces.Piece;
 import org.junit.jupiter.api.*;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.chess.utils.StringUtils.appendNewLine;
@@ -34,9 +33,9 @@ class BoardTest {
         Board board = Board.create();
 
         // then
-        assertThat(8).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.PAWN));
-        assertThat(2).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.ROOK));
-        assertThat(2).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.KNIGHT));
+        assertThat(8).isEqualTo(board.countPieces(Color.WHITE, Piece.Type.PAWN));
+        assertThat(2).isEqualTo(board.countPieces(Color.WHITE, Piece.Type.ROOK));
+        assertThat(2).isEqualTo(board.countPieces(Color.WHITE, Piece.Type.KNIGHT));
     }
 
     @Test
@@ -63,8 +62,8 @@ class BoardTest {
         Board board = Board.create();
 
         // then
-        assertThat(board.calculatePoint(Piece.Color.BLACK)).isCloseTo(38.0, within(0.01));
-        assertThat(board.calculatePoint(Piece.Color.WHITE)).isCloseTo(38.0, within(0.01));
+        assertThat(board.calculatePoint(Color.BLACK)).isCloseTo(38.0, within(0.01));
+        assertThat(board.calculatePoint(Color.WHITE)).isCloseTo(38.0, within(0.01));
     }
 
     @Test
