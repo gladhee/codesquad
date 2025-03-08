@@ -3,147 +3,94 @@ package org.chess.domain.board;
 import org.chess.domain.pieces.Piece;
 import org.chess.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 public class Board {
 
     private static final int BOARD_SIZE = 8;
-    private static final char EMPTY = '.';
-    private static final int WHITE_MAIN_ROW = 7;
-    private static final int WHITE_PAWN_ROW = 6;
-    private static final int BLACK_MAIN_ROW = 0;
-    private static final int BLACK_PAWN_ROW = 1;
+    private final Map<Position, Piece> board;
 
-    private final List<Rank> board;
-    private final List<Piece> whitePieces;
-    private final List<Piece> blackPieces;
-
-    public Board() {
-        this.board = new ArrayList<>();
-        this.whitePieces = new ArrayList<>();
-        this.blackPieces = new ArrayList<>();
+    private Board() {
+        this.board = new HashMap<>();
+        initialize();
     }
 
-    public void initialize() {
-        setupPieces();
-        initializeEmptyBoard();
-        placePiecesOnBoard();
+    public static Board create() {
+        return new Board();
     }
 
-    private void setupPieces() {
-        blackPieces.addAll(List.of(
-                Piece.createBlack(Piece.Type.ROOK), Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.BISHOP),
-                Piece.createBlack(Piece.Type.QUEEN), Piece.createBlack(Piece.Type.KING), Piece.createBlack(Piece.Type.BISHOP),
-                Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.ROOK)
-        ));
-
+    private void initialize() {
+        setEmptyBoard();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            whitePieces.add(Piece.createWhite(Piece.Type.PAWN));
-            blackPieces.add(Piece.createBlack(Piece.Type.PAWN));
+            board.put(Position.of(6, i), Piece.createWhite(Piece.Type.PAWN));
+            board.put(Position.of(1, i), Piece.createBlack(Piece.Type.PAWN));
         }
+        // 기타 기물 배치 (룩, 나이트, 비숍, 킹, 퀸)
+        board.put(Position.of(7, 0), Piece.createWhite(Piece.Type.ROOK));
+        board.put(Position.of(7, 7), Piece.createWhite(Piece.Type.ROOK));
+        board.put(Position.of(0, 0), Piece.createBlack(Piece.Type.ROOK));
+        board.put(Position.of(0, 7), Piece.createBlack(Piece.Type.ROOK));
 
-        whitePieces.addAll(List.of(
-                Piece.createWhite(Piece.Type.ROOK), Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.BISHOP),
-                Piece.createWhite(Piece.Type.QUEEN), Piece.createWhite(Piece.Type.KING), Piece.createWhite(Piece.Type.BISHOP),
-                Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.ROOK)
-        ));
+        board.put(Position.of(7, 1), Piece.createWhite(Piece.Type.KNIGHT));
+        board.put(Position.of(7, 6), Piece.createWhite(Piece.Type.KNIGHT));
+        board.put(Position.of(0, 1), Piece.createBlack(Piece.Type.KNIGHT));
+        board.put(Position.of(0, 6), Piece.createBlack(Piece.Type.KNIGHT));
 
+        board.put(Position.of(7, 2), Piece.createWhite(Piece.Type.BISHOP));
+        board.put(Position.of(7, 5), Piece.createWhite(Piece.Type.BISHOP));
+        board.put(Position.of(0, 2), Piece.createBlack(Piece.Type.BISHOP));
+        board.put(Position.of(0, 5), Piece.createBlack(Piece.Type.BISHOP));
+
+        board.put(Position.of(7, 3), Piece.createWhite(Piece.Type.QUEEN));
+        board.put(Position.of(0, 3), Piece.createBlack(Piece.Type.QUEEN));
+
+        board.put(Position.of(7, 4), Piece.createWhite(Piece.Type.KING));
+        board.put(Position.of(0, 4), Piece.createBlack(Piece.Type.KING));
     }
 
-    public void initializeEmptyBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            List<Piece> emptyPieces = IntStream.range(0, BOARD_SIZE)
-                    .mapToObj(j -> Piece.createBlankPiece())
-                    .collect(Collectors.toList());
-            board.add(Rank.of(emptyPieces));
+    private void setEmptyBoard() {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                board.put(Position.of(y, x), Piece.createBlankPiece());
+            }
         }
     }
 
-    private void placePiecesOnBoard() {
-        board.set(WHITE_PAWN_ROW, Rank.of(whitePieces.subList(0, 8)));
-        board.set(WHITE_MAIN_ROW, Rank.of(whitePieces.subList(8, 16)));
-        board.set(BLACK_MAIN_ROW, Rank.of(blackPieces.subList(0, 8)));
-        board.set(BLACK_PAWN_ROW, Rank.of(blackPieces.subList(8, 16)));
+    public void movePiece(Position from, Position to) {
+        Piece piece = getPiece(from);
+        board.remove(from);
+        board.put(to, piece);
+        board.put(from, Piece.createBlankPiece());
     }
 
-    public void print() {
-        System.out.println(showBoard());
-    }
-
-    public String showBoard() {
-        StringBuilder sb = new StringBuilder();
-        for (Rank rank : board) {
-            sb.append(rank).append(StringUtils.NEWLINE);
-        }
-        return sb.toString();
-    }
-
-    public void add(Piece piece) {
-        whitePieces.add(piece);
-    }
-
-    public void move(String position, Piece piece) {
-        Position pos = Position.of(position);
-
-        board.get(pos.y()).placePieceAt(pos.x(), piece);
-    }
-
-    public void move(String src, String dest) {
-        Position srcPos = Position.of(src);
-        Position destPos = Position.of(dest);
-
-        Piece piece = board.get(srcPos.y()).getPieceAt(srcPos.x());
-
-        board.get(srcPos.y()).placePieceAt(srcPos.x(), Piece.createBlankPiece());
-        board.get(destPos.y()).placePieceAt(destPos.x(), piece);
-    }
-
-    public int pieceCount() {
-        return whitePieces.size() + blackPieces.size();
+    public Piece getPiece(Position pos) {
+        return board.getOrDefault(pos, Piece.createBlankPiece());
     }
 
     public int countPieces(Piece.Color color, Piece.Type type) {
-        return board.stream()
-                .mapToInt(rank -> rank.countPieces(color, type))
-                .sum();
-    }
-
-    public Piece findPawn(int index) {
-        return whitePieces.get(index);
-    }
-
-    public Piece findPiece(String position) {
-        Position pos = Position.of(position);
-
-        return board.get(pos.y()).getPieceAt(pos.x());
-    }
-
-    public String getPawnsResultWith(int row) {
-        return board.get(row).toString();
+        return (int) board.values().stream()
+                .filter(piece -> piece.isSameColor(color) && piece.isSameType(type))
+                .count();
     }
 
     public double calculatePoint(Piece.Color color) {
-        return board.stream()
-                .mapToDouble(rank -> rank.calculatePoints(color))
+        return board.values().stream()
+                .filter(piece -> piece.isSameColor(color))
+                .mapToDouble(Piece::getPoint)
                 .sum();
     }
 
-    public List<Piece> sortPiecesByAscending(Piece.Color color) {
-        return board.stream()
-                .flatMap(rank -> rank.getPiecesByColor(color).stream())
-                .sorted(Comparator.comparingDouble(Piece::getPoint))
-                .collect(Collectors.toList());
-    }
-
-    public List<Piece> sortPiecesByDescending(Piece.Color color) {
-        return board.stream()
-                .flatMap(rank -> rank.getPiecesByColor(color).stream())
-                .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
-                .collect(Collectors.toList());
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                Piece piece = board.get(Position.of(y, x));
+                sb.append(piece.isSameColor(Piece.Color.WHITE) ? piece.getType().getWhiteType() : piece.getType().getBlackType());
+            }
+            sb.append(StringUtils.NEWLINE);
+        }
+        return sb.toString();
     }
 
 }

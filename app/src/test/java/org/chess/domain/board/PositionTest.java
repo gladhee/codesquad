@@ -11,7 +11,7 @@ class PositionTest {
 
     @BeforeEach
     void setUp() {
-        this.board = new Board();
+        this.board = Board.create();
     }
 
     @Test

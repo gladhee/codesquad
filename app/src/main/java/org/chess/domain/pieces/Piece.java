@@ -80,6 +80,14 @@ public class Piece {
         return color.equals(Color.BLACK);
     }
 
+    public boolean isSameColor(Color color) {
+        return this.color.equals(color);
+    }
+
+    public boolean isSameType(Type type) {
+        return this.representation.equals(type);
+    }
+
     public Color getColor() {
         return color;
     }
