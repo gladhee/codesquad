@@ -5,20 +5,27 @@ import java.util.Objects;
 public class Position {
 
     private static final int BOARD_SIZE = 8;
-
     private final int y;
     private final int x;
 
     private Position(int y, int x) {
+        if (y < 0 || y >= BOARD_SIZE || x < 0 || x >= BOARD_SIZE) {
+            throw new IllegalArgumentException("유효하지 않은 좌표: (" + y + ", " + x + ")");
+        }
+
         this.y = y;
         this.x = x;
     }
 
     public static Position of(String pos) {
-        int x = pos.charAt(0) - 'a';
+        if (pos == null || pos.length() != 2) {
+            throw new IllegalArgumentException("잘못된 좌표 문자열: " + pos);
+        }
 
-        // 8 -> 0, 7 -> 1, ..., 1 -> 7
-        int y = BOARD_SIZE - pos.charAt(1) + '0';
+        int x = pos.charAt(0) - 'a';
+        int rank = pos.charAt(1) - '0';
+        int y = BOARD_SIZE - rank;
+
         return new Position(y, x);
     }
 
@@ -26,12 +33,16 @@ public class Position {
         return new Position(y, x);
     }
 
-    public int y() {
-        return y;
+    public int deltaX(Position other) {
+        return Math.abs(this.x - other.x);
     }
 
-    public int x() {
-        return x;
+    public int deltaY(Position other) {
+        return Math.abs(this.y - other.y);
+    }
+
+    public int diffY(Position other) {
+        return other.y - this.y;
     }
 
     @Override
@@ -44,6 +55,13 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(y, x);
+    }
+
+    @Override
+    public String toString() {
+        char file = (char) ('a' + x);
+        char rank = (char) ('8' - y);
+        return "" + file + rank;
     }
 
 }
