@@ -1,7 +1,7 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Color;
-import org.chess.domain.pieces.Piece;
+import org.chess.domain.piece.Color;
+import org.chess.domain.piece.Piece;
 import org.chess.utils.StringUtils;
 
 import java.util.*;

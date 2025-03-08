@@ -1,7 +1,7 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Color;
-import org.chess.domain.pieces.Piece;
+import org.chess.domain.piece.Color;
+import org.chess.domain.piece.Piece;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.*;
