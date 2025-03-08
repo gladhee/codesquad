@@ -28,4 +28,18 @@ class PositionTest {
         Assertions.assertThat(position.x()).isEqualTo(0);
     }
 
+    @Test
+    @DisplayName("좌표가 같은 Position 객체는 equals() 메소드 결과가 true여야 한다")
+    void 동등성_비교_테스트() {
+        // given
+        Position pos1 = Position.of(0, 0);
+        Position pos2 = Position.of(0, 0);
+
+        // when
+        boolean result = pos1.equals(pos2);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
 }
