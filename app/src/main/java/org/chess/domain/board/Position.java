@@ -45,7 +45,7 @@ public class Position {
         return other.y - this.y;
     }
 
-    /*
+    /**
     * @brief 현재 위치에서 target 위치로 이동하기 위한 다음 위치를 반환합니다.
     *
     * @param target 이동할 위치
