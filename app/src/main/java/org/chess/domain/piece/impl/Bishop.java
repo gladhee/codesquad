@@ -15,7 +15,31 @@ public class Bishop implements Piece {
 
     @Override
     public boolean isValidMove(Board board, Position from, Position to) {
-        return false;
+        if (from.deltaX(to) != from.deltaY(to)) {
+            return false;
+        }
+
+        return isPathClear(board, from, to);
+    }
+
+    private boolean isPathClear(Board board, Position from, Position to) {
+        Position current = from.nextStepTowards(to);
+        while (!current.equals(to)) {
+            if (board.isOccupied(current)) return false;
+            current = current.nextStepTowards(to);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isSameTeam(Piece other) {
+        return other.belongsTo(color);
+    }
+
+    @Override
+    public boolean belongsTo(Color color) {
+        return this.color == color;
     }
 
     @Override

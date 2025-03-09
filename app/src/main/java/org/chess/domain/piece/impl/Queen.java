@@ -15,7 +15,38 @@ public class Queen implements Piece {
 
     @Override
     public boolean isValidMove(Board board, Position from, Position to) {
+        int dx = from.deltaX(to);
+        int dy = from.deltaY(to);
+        // 수평, 수직 이동
+        if (dx == 0 || dy == 0) {
+            return isPathClear(board, from, to);
+        }
+        // 대각선 이동
+        if (dx == dy) {
+            return isPathClear(board, from, to);
+        }
+
         return false;
+    }
+
+    private boolean isPathClear(Board board, Position from, Position to) {
+        Position current = from.nextStepTowards(to);
+        while (!current.equals(to)) {
+            if (board.isOccupied(current)) return false;
+            current = current.nextStepTowards(to);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isSameTeam(Piece other) {
+        return other.belongsTo(color);
+    }
+
+    @Override
+    public boolean belongsTo(Color color) {
+        return this.color == color;
     }
 
     @Override

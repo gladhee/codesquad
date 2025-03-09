@@ -45,6 +45,19 @@ public class Position {
         return other.y - this.y;
     }
 
+    /*
+    * @brief 현재 위치에서 target 위치로 이동하기 위한 다음 위치를 반환합니다.
+    *
+    * @param target 이동할 위치
+    * @return target 위치로 이동하기 위한 다음 위치
+    * */
+    public Position nextStepTowards(Position target) {
+        int dx = Integer.compare(target.x, this.x);
+        int dy = Integer.compare(target.y, this.y);
+
+        return Position.of(this.y + dy, this.x + dx);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

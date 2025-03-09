@@ -7,4 +7,8 @@ public interface Piece {
 
     boolean isValidMove(Board board, Position from, Position to);
 
+    boolean isSameTeam(Piece other);
+
+    boolean belongsTo(Color color);
+
 }

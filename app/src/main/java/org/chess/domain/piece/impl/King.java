@@ -15,7 +15,17 @@ public class King implements Piece {
 
     @Override
     public boolean isValidMove(Board board, Position from, Position to) {
-        return false;
+        return from.deltaX(to) <= 1 && from.deltaY(to) <= 1;
+    }
+
+    @Override
+    public boolean isSameTeam(Piece other) {
+        return other.belongsTo(color);
+    }
+
+    @Override
+    public boolean belongsTo(Color color) {
+        return this.color == color;
     }
 
     @Override

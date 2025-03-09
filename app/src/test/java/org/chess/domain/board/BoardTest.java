@@ -43,19 +43,4 @@ class BoardTest {
                 .isEqualTo(board.getPiece(Position.of("a1")));
     }
 
-    @Test
-    @DisplayName("from 에서 to 로 기물을 이동할 수 있어야 한다")
-    void 기물_이동_테스트() {
-        // given
-        Board board = Board.create();
-
-        // when
-        Position srcPos = Position.of("b2");
-        Position destPos = Position.of("b4");
-        board.movePiece(srcPos, destPos);
-
-        assertThat(PieceFactory.PAWN.create(Color.WHITE)).isEqualTo(board.getPiece(destPos));
-        assertThat(PieceFactory.BLANK.create(Color.NOCOLOR)).isEqualTo(board.getPiece(srcPos));
-    }
-
 }

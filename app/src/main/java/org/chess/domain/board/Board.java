@@ -59,10 +59,25 @@ public class Board {
     }
 
     public void movePiece(Position from, Position to) {
-        Piece piece = getPiece(from);
+        Piece piece = board.get(from);
+        if (piece == null) {
+            throw new IllegalArgumentException("출발 위치 " + from + "에 기물이 없습니다.");
+        }
+        if (!piece.isValidMove(this, from, to)) {
+            throw new IllegalArgumentException("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
+        }
+        Piece toPiece = board.get(to);
+        if (toPiece != null && piece.isSameTeam(toPiece)) {
+            throw new IllegalArgumentException("자신의 기물을 잡을 수 없습니다: " + to);
+        }
+
         board.remove(from);
         board.put(to, piece);
         board.put(from, PieceFactory.BLANK.create(Color.NOCOLOR));
+    }
+
+    public boolean isOccupied(Position pos) {
+        return board.containsKey(pos);
     }
 
     public Piece getPiece(Position pos) {

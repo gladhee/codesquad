@@ -19,6 +19,16 @@ public class Blank implements Piece {
     }
 
     @Override
+    public boolean isSameTeam(Piece other) {
+        return false;
+    }
+
+    @Override
+    public boolean belongsTo(Color color) {
+        return false;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

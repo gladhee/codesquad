@@ -15,7 +15,20 @@ public class Knight implements Piece {
 
     @Override
     public boolean isValidMove(Board board, Position from, Position to) {
-        return false;
+        int dx = from.deltaX(to);
+        int dy = from.deltaY(to);
+
+        return (dx == 1 && dy == 2) || (dx == 2 && dy == 1);
+    }
+
+    @Override
+    public boolean isSameTeam(Piece other) {
+        return other.belongsTo(color);
+    }
+
+    @Override
+    public boolean belongsTo(Color color) {
+        return this.color == color;
     }
 
     @Override
