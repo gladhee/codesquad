@@ -1,7 +1,10 @@
 package org.chess.domain.board;
 
 import org.chess.domain.piece.Color;
+import org.chess.domain.piece.Piece;
 import org.chess.domain.piece.PieceFactory;
+import org.chess.domain.piece.impl.Blank;
+import org.chess.domain.piece.provider.TestBoardProvider;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.*;
@@ -41,6 +44,60 @@ class BoardTest {
                 .isEqualTo(board.getPiece(Position.of("a8")));
         assertThat(PieceFactory.ROOK.create(Color.WHITE))
                 .isEqualTo(board.getPiece(Position.of("a1")));
+    }
+
+    @Test
+    @DisplayName("movePiece()를 통해 기물이 올바르게 이동해야 한다")
+    void 이동_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        Position from = Position.of("a2");
+        Position to = Position.of("a3");
+        Piece whitePawn = PieceFactory.PAWN.create(Color.WHITE);
+        TestBoardProvider.setPiece(board, from, whitePawn);
+
+        // then
+        assertThat(board.getPiece(from)).isEqualTo(whitePawn);
+        assertThat(board.isOccupied(to)).isFalse();
+
+        // when
+        board.movePiece(from, to);
+
+        // then
+        assertThat(board.getPiece(to)).isEqualTo(PieceFactory.PAWN.create(Color.WHITE));
+        assertThat(board.getPiece(from)).isInstanceOf(Blank.class);
+    }
+
+    @Test
+    @DisplayName("자신의 기물이 있는 위치로 이동하면 예외가 발생해야 한다")
+    void 동일_팀_기물_이동_예외_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        Position from = Position.of("a2");
+        Position to = Position.of("a3");
+        Piece whitePawn1 = PieceFactory.PAWN.create(Color.WHITE);
+        Piece whitePawn2 = PieceFactory.PAWN.create(Color.WHITE);
+        TestBoardProvider.setPiece(board, from, whitePawn1);
+        TestBoardProvider.setPiece(board, to, whitePawn2);
+
+        // when & then
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("출발 위치에 기물이 없으면 이동 시 예외가 발생해야 한다")
+    void 빈_출발지_이동_예외_테스트() {
+        // given
+        Board board = Board.create();
+        Position from = Position.of("e4");
+        Position to = Position.of("e5");
+
+        // when & then
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
     }
 
 }
