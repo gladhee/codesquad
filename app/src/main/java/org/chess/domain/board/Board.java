@@ -3,6 +3,7 @@ package org.chess.domain.board;
 import org.chess.domain.piece.Color;
 import org.chess.domain.piece.Piece;
 import org.chess.domain.piece.PieceFactory;
+import org.chess.domain.piece.impl.Blank;
 import org.chess.utils.StringUtils;
 
 import java.util.*;
@@ -77,7 +78,9 @@ public class Board {
     }
 
     public boolean isOccupied(Position pos) {
-        return board.containsKey(pos);
+        Piece piece = board.get(pos);
+
+        return piece != null && !(piece instanceof Blank);
     }
 
     public Piece getPiece(Position pos) {
