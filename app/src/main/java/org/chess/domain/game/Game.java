@@ -1,20 +1,41 @@
 package org.chess.domain.game;
 
+import org.chess.console.Input;
 import org.chess.domain.board.Board;
 import org.chess.domain.board.Position;
 import org.chess.domain.piece.Color;
 
 public class Game {
+
+    private static final int FROM = 0;
+    private static final int TO = 1;
+
     private final Board board;
+    private final Input input;
     private Color currentTurn;
 
-    private Game(Board board) {
+    private Game(Board board, Input input) {
         this.board = board;
+        this.input = input;
         currentTurn = Color.WHITE;
     }
 
-    public static Game newGame(Board board) {
-        return new Game(board);
+    public static Game newGame(Board board, Input input) {
+        return new Game(board, input);
+    }
+
+    public void run() {
+        System.out.println("게임을 시작합니다.");
+        System.out.println(board);
+        while (true) {
+            try {
+                String[] moves = input.getMoves();
+                move(Position.of(moves[FROM]), Position.of(moves[TO]));
+                System.out.println(board);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -24,14 +45,18 @@ public class Game {
      * @brief 주어진 from, to 체스 표기법 문자열에 따라 기물을 이동시킨다.
      */
     public void move(Position from, Position to) {
+        isMyTurn(from);
+        board.movePiece(from, to);
+        toggleTurn();
+    }
+
+    private void isMyTurn(Position from) {
         if (!board.getPiece(from).belongsTo(currentTurn)) {
             throw new IllegalArgumentException("현재 턴(" + currentTurn + ")의 기물이 아닙니다.");
         }
+    }
 
-        // 이동이 유효한지 Board에서 판단 (유효하지 않으면 내부에서 예외 발생)
-        board.movePiece(from, to);
-
-        // 턴 토글
+    private void toggleTurn() {
         currentTurn = (currentTurn == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
