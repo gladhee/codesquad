@@ -2,6 +2,7 @@ package org.chess.domain.board;
 
 import org.chess.domain.piece.Color;
 import org.chess.domain.piece.Piece;
+import org.chess.domain.piece.PieceFactory;
 import org.chess.utils.StringUtils;
 
 import java.util.*;
@@ -23,36 +24,36 @@ public class Board {
     private void initialize() {
         setEmptyBoard();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            board.put(Position.of(6, i), Piece.createWhite(Piece.Type.PAWN));
-            board.put(Position.of(1, i), Piece.createBlack(Piece.Type.PAWN));
+            board.put(Position.of(6, i), PieceFactory.PAWN.create(Color.WHITE));
+            board.put(Position.of(1, i), PieceFactory.PAWN.create(Color.BLACK));
         }
         // 기타 기물 배치 (룩, 나이트, 비숍, 킹, 퀸)
-        board.put(Position.of(7, 0), Piece.createWhite(Piece.Type.ROOK));
-        board.put(Position.of(7, 7), Piece.createWhite(Piece.Type.ROOK));
-        board.put(Position.of(0, 0), Piece.createBlack(Piece.Type.ROOK));
-        board.put(Position.of(0, 7), Piece.createBlack(Piece.Type.ROOK));
+        board.put(Position.of(7, 0), PieceFactory.ROOK.create(Color.WHITE));
+        board.put(Position.of(7, 7), PieceFactory.ROOK.create(Color.WHITE));
+        board.put(Position.of(0, 0), PieceFactory.ROOK.create(Color.BLACK));
+        board.put(Position.of(0, 7), PieceFactory.ROOK.create(Color.BLACK));
 
-        board.put(Position.of(7, 1), Piece.createWhite(Piece.Type.KNIGHT));
-        board.put(Position.of(7, 6), Piece.createWhite(Piece.Type.KNIGHT));
-        board.put(Position.of(0, 1), Piece.createBlack(Piece.Type.KNIGHT));
-        board.put(Position.of(0, 6), Piece.createBlack(Piece.Type.KNIGHT));
+        board.put(Position.of(7, 1), PieceFactory.KNIGHT.create(Color.WHITE));
+        board.put(Position.of(7, 6), PieceFactory.KNIGHT.create(Color.WHITE));
+        board.put(Position.of(0, 1), PieceFactory.KNIGHT.create(Color.BLACK));
+        board.put(Position.of(0, 6), PieceFactory.KNIGHT.create(Color.BLACK));
 
-        board.put(Position.of(7, 2), Piece.createWhite(Piece.Type.BISHOP));
-        board.put(Position.of(7, 5), Piece.createWhite(Piece.Type.BISHOP));
-        board.put(Position.of(0, 2), Piece.createBlack(Piece.Type.BISHOP));
-        board.put(Position.of(0, 5), Piece.createBlack(Piece.Type.BISHOP));
+        board.put(Position.of(7, 2), PieceFactory.BISHOP.create(Color.WHITE));
+        board.put(Position.of(7, 5), PieceFactory.BISHOP.create(Color.WHITE));
+        board.put(Position.of(0, 2), PieceFactory.BISHOP.create(Color.BLACK));
+        board.put(Position.of(0, 5), PieceFactory.BISHOP.create(Color.BLACK));
 
-        board.put(Position.of(7, 3), Piece.createWhite(Piece.Type.QUEEN));
-        board.put(Position.of(0, 3), Piece.createBlack(Piece.Type.QUEEN));
+        board.put(Position.of(7, 3), PieceFactory.QUEEN.create(Color.WHITE));
+        board.put(Position.of(0, 3), PieceFactory.QUEEN.create(Color.BLACK));
 
-        board.put(Position.of(7, 4), Piece.createWhite(Piece.Type.KING));
-        board.put(Position.of(0, 4), Piece.createBlack(Piece.Type.KING));
+        board.put(Position.of(7, 4), PieceFactory.KING.create(Color.WHITE));
+        board.put(Position.of(0, 4), PieceFactory.KING.create(Color.BLACK));
     }
 
     private void setEmptyBoard() {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
-                board.put(Position.of(y, x), Piece.createBlankPiece());
+                board.put(Position.of(y, x), PieceFactory.BLANK.create(Color.NOCOLOR));
             }
         }
     }
@@ -61,24 +62,11 @@ public class Board {
         Piece piece = getPiece(from);
         board.remove(from);
         board.put(to, piece);
-        board.put(from, Piece.createBlankPiece());
+        board.put(from, PieceFactory.BLANK.create(Color.NOCOLOR));
     }
 
     public Piece getPiece(Position pos) {
-        return board.getOrDefault(pos, Piece.createBlankPiece());
-    }
-
-    public int countPieces(Color color, Piece.Type type) {
-        return (int) board.values().stream()
-                .filter(piece -> piece.isSameColor(color) && piece.isSameType(type))
-                .count();
-    }
-
-    public double calculatePoint(Color color) {
-        return board.values().stream()
-                .filter(piece -> piece.isSameColor(color))
-                .mapToDouble(Piece::getPoint)
-                .sum();
+        return board.getOrDefault(pos, PieceFactory.BLANK.create(Color.NOCOLOR));
     }
 
     @Override
@@ -87,7 +75,7 @@ public class Board {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 Piece piece = board.get(Position.of(y, x));
-                sb.append(piece.isSameColor(Color.WHITE) ? piece.getType().getWhiteType() : piece.getType().getBlackType());
+                sb.append(piece);
             }
             sb.append(StringUtils.NEWLINE);
         }
