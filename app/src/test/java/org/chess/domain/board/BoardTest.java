@@ -100,4 +100,49 @@ class BoardTest {
                 .hasMessageContaining("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
     }
 
+    @Test
+    @DisplayName("화이트 기물 점수 합산 테스트")
+    void 흰색_점수_합산_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        TestBoardProvider.setPiece(board, Position.of("a2"), PieceFactory.PAWN.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("b2"), PieceFactory.KNIGHT.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("c2"), PieceFactory.BISHOP.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("d2"), PieceFactory.ROOK.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("e2"), PieceFactory.QUEEN.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("f2"), PieceFactory.KING.create(Color.WHITE));
+
+        // Expected total score: 1.0 + 2.5 + 3.0 + 5.0 + 9.0 + 0.0 = 20.5
+        double expectedScore = 20.5;
+
+        // when
+        double actualScore = board.calculateScore(Color.WHITE);
+
+        // then
+        assertThat(actualScore).isEqualTo(expectedScore);
+    }
+
+    @Test
+    @DisplayName("검정 기물 점수 합산 테스트")
+    void 검은색_점수_합산_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        // 배치 예시:
+        TestBoardProvider.setPiece(board, Position.of("a7"), PieceFactory.PAWN.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("b7"), PieceFactory.KNIGHT.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("c7"), PieceFactory.BISHOP.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("d7"), PieceFactory.ROOK.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("e7"), PieceFactory.QUEEN.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("f7"), PieceFactory.KING.create(Color.BLACK));
+
+        // Expected total score: 1.0 + 2.5 + 3.0 + 5.0 + 9.0 + 0.0 = 20.5
+        double expectedScore = 20.5;
+
+        // when
+        double actualScore = board.calculateScore(Color.BLACK);
+
+        // then
+        assertThat(actualScore).isEqualTo(expectedScore);
+    }
+
 }

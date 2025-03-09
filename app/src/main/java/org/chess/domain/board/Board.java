@@ -75,6 +75,17 @@ public class Board {
         board.put(from, PieceFactory.BLANK.create(Color.NOCOLOR));
     }
 
+    public double calculateScore(Color color) {
+        double total = 0.0;
+        for (Piece piece : board.values()) {
+            if (piece != null && piece.belongsTo(color)) {
+                total += piece.getScore();
+            }
+        }
+
+        return total;
+    }
+
     public boolean isOccupied(Position pos) {
         Piece piece = board.get(pos);
 
