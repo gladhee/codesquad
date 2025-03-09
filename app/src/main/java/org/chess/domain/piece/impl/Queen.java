@@ -50,6 +50,11 @@ public class Queen implements Piece {
     }
 
     @Override
+    public double getScore() {
+        return 9.0;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

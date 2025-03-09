@@ -43,6 +43,11 @@ public class Rook implements Piece {
     }
 
     @Override
+    public double getScore() {
+        return 5.0;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

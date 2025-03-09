@@ -32,6 +32,11 @@ public class Knight implements Piece {
     }
 
     @Override
+    public double getScore() {
+        return 2.5;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

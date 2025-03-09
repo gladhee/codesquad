@@ -11,4 +11,6 @@ public interface Piece {
 
     boolean belongsTo(Color color);
 
+    double getScore();
+
 }

@@ -74,6 +74,11 @@ public class Pawn implements Piece {
     }
 
     @Override
+    public double getScore() {
+        return 1.0;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
