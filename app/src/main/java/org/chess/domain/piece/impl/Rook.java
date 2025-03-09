@@ -19,6 +19,23 @@ public class Rook implements Piece {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Rook rook = (Rook) obj;
+        return color == rook.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return color.hashCode();
+    }
+
+    @Override
     public String toString() {
         return color == Color.WHITE ? "r" : "R";
     }

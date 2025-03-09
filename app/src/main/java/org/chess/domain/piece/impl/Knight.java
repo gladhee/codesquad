@@ -19,6 +19,23 @@ public class Knight implements Piece {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Knight knight = (Knight) obj;
+        return color == knight.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return color.hashCode();
+    }
+
+    @Override
     public String toString() {
         return color == Color.WHITE ? "n" : "N";
     }
