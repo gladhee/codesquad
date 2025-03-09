@@ -24,6 +24,23 @@ class PositionTest {
         assertThat(actual).isTrue();
     }
 
+    // nextStepTowards() 테스트
+    @Test
+    @DisplayName("현재 위치에서 target 위치로 이동하기 위한 다음 위치를 반환한다.")
+    void target_위치로_이동하기_위한_다음_위치_반환_테스트() {
+        // given
+        Position from = Position.of(0, 0);
+        Position to = Position.of(2, 2);
+
+        // when
+        Position nextStep = from.nextStepTowards(to);
+        Position actual = nextStep.nextStepTowards(to);
+
+        // then
+        assertThat(nextStep).isEqualTo(Position.of(1, 1));
+        assertThat(actual).isEqualTo(to);
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"a8", "h1", "d5", "e4"})
     @DisplayName("체스 표기법 문자열을 올바른 내부 좌표로 변환한다.")
