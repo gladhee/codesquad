@@ -1,71 +1,24 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Piece;
+import org.chess.domain.piece.Color;
+import org.chess.domain.piece.Piece;
+import org.chess.domain.piece.PieceFactory;
+import org.chess.domain.piece.impl.Blank;
+import org.chess.domain.piece.provider.TestBoardProvider;
 import org.junit.jupiter.api.*;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.chess.utils.StringUtils.appendNewLine;
 
 class BoardTest {
 
-    private Piece whitePawn;
-    private Piece blackPawn;
-
-    @BeforeEach
-    void setUp() {
-        this.whitePawn = Piece.createWhite(Piece.Type.PAWN);
-        this.blackPawn = Piece.createBlack(Piece.Type.PAWN);
-    }
-
-    @Test
-    @DisplayName("보드 생성 후 Pawn을 추가하고 저장할 수 있어야 한다")
-    void create() throws Exception {
-        // given
-        Board board = new Board();
-
-        // when
-        board.add(whitePawn);
-
-        // then
-        assertThat(1).isEqualTo(board.pieceCount());
-        assertThat(whitePawn).isEqualTo(board.findPawn(0));
-
-        // when
-        board.add(blackPawn);
-
-        // then
-        assertThat(2).isEqualTo(board.pieceCount());
-        assertThat(blackPawn).isEqualTo(board.findPawn(1));
-    }
-
-    @Test
-    @DisplayName("보드 생성 후 폰을 초기화시 흰색 폰과 검은색 폰이 각각 8개씩 생성되어야 한다")
-    void initialize() throws Exception {
-        // given
-        Board board = new Board();
-
-        // when
-        board.initialize();
-
-        // then
-        assertThat("pppppppp").isEqualTo(board.getPawnsResultWith(6));
-        assertThat("PPPPPPPP").isEqualTo(board.getPawnsResultWith(1));
-    }
-
     @Test
     @DisplayName("보드 initailize 후 모든 기물이 생성되어야 한다")
-    void initializeAllPieces() throws Exception {
-        // given
-        Board board = new Board();
-
-        // when
-        board.initialize();
+    void initializeAllPieces() {
+        // given & when
+        Board board = Board.create();
 
         // then
-        assertThat(board.pieceCount()).isEqualTo(32);
-
         String blankRank = appendNewLine("........");
 
         assertThat(appendNewLine("RNBQKBNR") +
@@ -73,150 +26,123 @@ class BoardTest {
                 blankRank + blankRank + blankRank + blankRank +
                 appendNewLine("pppppppp") +
                 appendNewLine("rnbqkbnr"))
-                .isEqualTo(board.showBoard());
-    }
-
-    @Test
-    @DisplayName("Piece 의 색과 종류를 반환할 수 있어야 한다")
-    void 기물의_개수_반환_테스트() {
-        // given
-        Board board = new Board();
-
-        // when
-        board.initialize();
-
-        // then
-        assertThat(8).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.PAWN));
-        assertThat(2).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.ROOK));
-        assertThat(2).isEqualTo(board.countPieces(Piece.Color.WHITE, Piece.Type.KNIGHT));
+                .isEqualTo(board.toString());
     }
 
     @Test
     @DisplayName("임의의 주어진 위치의 기물을 조회할 수 있어야 한다")
     void 기물_조회_테스트() {
-        // given
-        Board board = new Board();
-
-        // when
-        board.initialize();
+        // given & when
+        Board board = Board.create();
 
         // then
-        assertThat(Piece.createBlack(Piece.Type.ROOK))
-                .isEqualTo(board.findPiece("h8"));
-        assertThat(Piece.createWhite(Piece.Type.ROOK))
-                .isEqualTo(board.findPiece("h1"));
-        assertThat(Piece.createBlack(Piece.Type.ROOK))
-                .isEqualTo(board.findPiece("a8"));
-        assertThat(Piece.createWhite(Piece.Type.ROOK))
-                .isEqualTo(board.findPiece("a1"));
+        assertThat(PieceFactory.ROOK.create(Color.BLACK))
+                .isEqualTo(board.getPiece(Position.of("h8")));
+        assertThat(PieceFactory.ROOK.create(Color.WHITE))
+                .isEqualTo(board.getPiece(Position.of("h1")));
+        assertThat(PieceFactory.ROOK.create(Color.BLACK))
+                .isEqualTo(board.getPiece(Position.of("a8")));
+        assertThat(PieceFactory.ROOK.create(Color.WHITE))
+                .isEqualTo(board.getPiece(Position.of("a1")));
     }
 
     @Test
-    @DisplayName("임의의 기물을 체스판위에 추가할 수 있어야 한다")
-    void 기물_추가_테스트() {
+    @DisplayName("movePiece()를 통해 기물이 올바르게 이동해야 한다")
+    void 이동_테스트() {
         // given
-        Board board = new Board();
-        board.initializeEmptyBoard();
+        Board board = TestBoardProvider.createEmptyBoard();
+        Position from = Position.of("a2");
+        Position to = Position.of("a3");
+        Piece whitePawn = PieceFactory.PAWN.create(Color.WHITE);
+        TestBoardProvider.setPiece(board, from, whitePawn);
 
-        String position = "b5";
-        Piece piece = Piece.createWhite(Piece.Type.ROOK);
-        board.move(position, piece);
+        // then
+        assertThat(board.getPiece(from)).isEqualTo(whitePawn);
+        assertThat(board.isOccupied(to)).isFalse();
 
-        assertThat(piece).isEqualTo(board.findPiece(position));
+        // when
+        board.movePiece(from, to);
+
+        // then
+        assertThat(board.getPiece(to)).isEqualTo(PieceFactory.PAWN.create(Color.WHITE));
+        assertThat(board.getPiece(from)).isInstanceOf(Blank.class);
     }
 
     @Test
-    @DisplayName("현재까지 남아있는 기물에 따라 점수를 계산할 수 있어야 한다")
-    void 점수_계산_테스트() {
+    @DisplayName("자신의 기물이 있는 위치로 이동하면 예외가 발생해야 한다")
+    void 동일_팀_기물_이동_예외_테스트() {
         // given
-        Board board = new Board();
-        board.initializeEmptyBoard();
+        Board board = TestBoardProvider.createEmptyBoard();
+        Position from = Position.of("a2");
+        Position to = Position.of("a3");
+        Piece whitePawn1 = PieceFactory.PAWN.create(Color.WHITE);
+        Piece whitePawn2 = PieceFactory.PAWN.create(Color.WHITE);
+        TestBoardProvider.setPiece(board, from, whitePawn1);
+        TestBoardProvider.setPiece(board, to, whitePawn2);
 
-        // when
-        addPiece(board, "b6", Piece.createBlack(Piece.Type.PAWN));
-        addPiece(board, "e6", Piece.createBlack(Piece.Type.QUEEN));
-        addPiece(board, "b8", Piece.createBlack(Piece.Type.KING));
-        addPiece(board, "c8", Piece.createBlack(Piece.Type.ROOK));
-
-        addPiece(board, "f2", Piece.createWhite(Piece.Type.PAWN));
-        addPiece(board, "g2", Piece.createWhite(Piece.Type.PAWN));
-        addPiece(board, "e1", Piece.createWhite(Piece.Type.ROOK));
-        addPiece(board, "f1", Piece.createWhite(Piece.Type.KING));
-
-        // then
-        assertThat(board.calculatePoint(Piece.Color.BLACK)).isCloseTo(15.0, within(0.01));
-        assertThat(board.calculatePoint(Piece.Color.WHITE)).isCloseTo(7.0, within(0.01));
-
-        System.out.println(board.showBoard());
+        // when & then
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
     }
 
     @Test
-    @DisplayName("검은색과 흰색 기물을 구분해서 점수가 높은 순으로 정렬할 수 있어야 한다")
-    void 기물_정렬_테스트() {
+    @DisplayName("출발 위치에 기물이 없으면 이동 시 예외가 발생해야 한다")
+    void 빈_출발지_이동_예외_테스트() {
         // given
-        Board board = new Board();
-        board.initializeEmptyBoard();
+        Board board = Board.create();
+        Position from = Position.of("e4");
+        Position to = Position.of("e5");
+
+        // when & then
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("화이트 기물 점수 합산 테스트")
+    void 흰색_점수_합산_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        TestBoardProvider.setPiece(board, Position.of("a2"), PieceFactory.PAWN.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("b2"), PieceFactory.KNIGHT.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("c2"), PieceFactory.BISHOP.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("d2"), PieceFactory.ROOK.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("e2"), PieceFactory.QUEEN.create(Color.WHITE));
+        TestBoardProvider.setPiece(board, Position.of("f2"), PieceFactory.KING.create(Color.WHITE));
+
+        // Expected total score: 1.0 + 2.5 + 3.0 + 5.0 + 9.0 + 0.0 = 20.5
+        double expectedScore = 20.5;
 
         // when
-        addPiece(board, "b6", Piece.createBlack(Piece.Type.PAWN));
-        addPiece(board, "e6", Piece.createBlack(Piece.Type.QUEEN));
-        addPiece(board, "b8", Piece.createBlack(Piece.Type.KING));
-        addPiece(board, "c8", Piece.createBlack(Piece.Type.ROOK));
-
-        addPiece(board, "f2", Piece.createWhite(Piece.Type.PAWN));
-        addPiece(board, "g2", Piece.createWhite(Piece.Type.PAWN));
-        addPiece(board, "e1", Piece.createWhite(Piece.Type.ROOK));
-        addPiece(board, "f1", Piece.createWhite(Piece.Type.KING));
+        double actualScore = board.calculateScore(Color.WHITE);
 
         // then
-        List<Piece> actualBlackPiecesWithAsc = board.sortPiecesByAscending(Piece.Color.BLACK);
-        List<Piece> actualWhitePiecesWithDesc = board.sortPiecesByDescending(Piece.Color.WHITE);
-        List<Piece> actualBlackPiecesWithDesc = board.sortPiecesByDescending(Piece.Color.BLACK);
-        List<Piece> actualWhitePiecesWithAsc = board.sortPiecesByAscending(Piece.Color.WHITE);
-
-        List<Piece> expectedBlackPiecesWithAsc = List.of(
-                Piece.createBlack(Piece.Type.KING),   // 0.0
-                Piece.createBlack(Piece.Type.PAWN),   // 1.0
-                Piece.createBlack(Piece.Type.ROOK),   // 5.0
-                Piece.createBlack(Piece.Type.QUEEN)   // 9.0
-        );
-
-        List<Piece> expectedBlackPiecesWithDesc = List.of(
-                Piece.createBlack(Piece.Type.QUEEN),  // 9.0
-                Piece.createBlack(Piece.Type.ROOK),   // 5.0
-                Piece.createBlack(Piece.Type.PAWN),   // 1.0
-                Piece.createBlack(Piece.Type.KING)    // 0.0
-        );
-
-        List<Piece> expectedWhitePiecesWithAsc = List.of(
-                Piece.createWhite(Piece.Type.KING),   // 0.0
-                Piece.createWhite(Piece.Type.PAWN),   // 1.0
-                Piece.createWhite(Piece.Type.PAWN),   // 1.0
-                Piece.createWhite(Piece.Type.ROOK)    // 5.0
-        );
-
-        List<Piece> expectedWhitePiecesWithDesc = List.of(
-                Piece.createWhite(Piece.Type.ROOK),   // 5.0
-                Piece.createWhite(Piece.Type.PAWN),   // 1.0
-                Piece.createWhite(Piece.Type.PAWN),   // 1.0
-                Piece.createWhite(Piece.Type.KING)    // 0.0
-        );
-
-        compare(actualBlackPiecesWithAsc, expectedBlackPiecesWithAsc);
-        compare(actualWhitePiecesWithDesc, expectedWhitePiecesWithDesc);
-        compare(actualBlackPiecesWithDesc, expectedBlackPiecesWithDesc);
-        compare(actualWhitePiecesWithAsc, expectedWhitePiecesWithAsc);
+        assertThat(actualScore).isEqualTo(expectedScore);
     }
 
-    private void addPiece(Board board, String Position, Piece piece) {
-        board.move(Position, piece);
-    }
+    @Test
+    @DisplayName("검정 기물 점수 합산 테스트")
+    void 검은색_점수_합산_테스트() {
+        // given
+        Board board = TestBoardProvider.createEmptyBoard();
+        // 배치 예시:
+        TestBoardProvider.setPiece(board, Position.of("a7"), PieceFactory.PAWN.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("b7"), PieceFactory.KNIGHT.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("c7"), PieceFactory.BISHOP.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("d7"), PieceFactory.ROOK.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("e7"), PieceFactory.QUEEN.create(Color.BLACK));
+        TestBoardProvider.setPiece(board, Position.of("f7"), PieceFactory.KING.create(Color.BLACK));
 
-    private void compare(List<Piece> actual, List<Piece> expected) {
-        assertThat(actual.size()).isEqualTo(expected.size());
-        for (int i = 0; i < actual.size(); i++) {
-            assertThat(actual.get(i)).isEqualTo(expected.get(i));
-        }
+        // Expected total score: 1.0 + 2.5 + 3.0 + 5.0 + 9.0 + 0.0 = 20.5
+        double expectedScore = 20.5;
+
+        // when
+        double actualScore = board.calculateScore(Color.BLACK);
+
+        // then
+        assertThat(actualScore).isEqualTo(expectedScore);
     }
 
 }

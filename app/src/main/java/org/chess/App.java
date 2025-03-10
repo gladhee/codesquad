@@ -5,19 +5,21 @@ package org.chess;
 
 import org.chess.domain.board.Board;
 import org.chess.console.Input;
+import org.chess.domain.board.Position;
+import org.chess.domain.game.Game;
 
 public class App {
 
     public static void main(String[] args) {
         Input input = new Input();
-        Board board = new Board();
+        Board board = Board.create();
+        Game game = Game.newGame(board, input);
 
         if (!input.suggestGame()) {
             return;
         }
 
-        board.initialize();
-        board.print();
+        game.run();
     }
 
 }

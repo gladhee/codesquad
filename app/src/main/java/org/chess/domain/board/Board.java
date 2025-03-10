@@ -1,144 +1,112 @@
 package org.chess.domain.board;
 
-import org.chess.domain.pieces.Piece;
+import org.chess.domain.piece.Color;
+import org.chess.domain.piece.Piece;
+import org.chess.domain.piece.PieceFactory;
+import org.chess.domain.piece.impl.Blank;
 import org.chess.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 public class Board {
 
     private static final int BOARD_SIZE = 8;
-    private static final char EMPTY = '.';
-    private static final int WHITE_MAIN_ROW = 7;
-    private static final int WHITE_PAWN_ROW = 6;
-    private static final int BLACK_MAIN_ROW = 0;
-    private static final int BLACK_PAWN_ROW = 1;
+    private final Map<Position, Piece> board;
 
-    private final List<Rank> board;
-    private final List<Piece> whitePieces;
-    private final List<Piece> blackPieces;
-
-    public Board() {
-        this.board = new ArrayList<>();
-        this.whitePieces = new ArrayList<>();
-        this.blackPieces = new ArrayList<>();
+    private Board() {
+        this.board = new HashMap<>();
+        initialize();
     }
 
-    public void initialize() {
-        setupPieces();
-        initializeEmptyBoard();
-        placePiecesOnBoard();
+    public static Board create() {
+        return new Board();
     }
 
-    private void setupPieces() {
-        blackPieces.addAll(List.of(
-                Piece.createBlack(Piece.Type.ROOK), Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.BISHOP),
-                Piece.createBlack(Piece.Type.QUEEN), Piece.createBlack(Piece.Type.KING), Piece.createBlack(Piece.Type.BISHOP),
-                Piece.createBlack(Piece.Type.KNIGHT), Piece.createBlack(Piece.Type.ROOK)
-        ));
-
+    private void initialize() {
+        setEmptyBoard();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            whitePieces.add(Piece.createWhite(Piece.Type.PAWN));
-            blackPieces.add(Piece.createBlack(Piece.Type.PAWN));
+            board.put(Position.of(6, i), PieceFactory.PAWN.create(Color.WHITE));
+            board.put(Position.of(1, i), PieceFactory.PAWN.create(Color.BLACK));
         }
+        // 기타 기물 배치 (룩, 나이트, 비숍, 킹, 퀸)
+        board.put(Position.of(7, 0), PieceFactory.ROOK.create(Color.WHITE));
+        board.put(Position.of(7, 7), PieceFactory.ROOK.create(Color.WHITE));
+        board.put(Position.of(0, 0), PieceFactory.ROOK.create(Color.BLACK));
+        board.put(Position.of(0, 7), PieceFactory.ROOK.create(Color.BLACK));
 
-        whitePieces.addAll(List.of(
-                Piece.createWhite(Piece.Type.ROOK), Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.BISHOP),
-                Piece.createWhite(Piece.Type.QUEEN), Piece.createWhite(Piece.Type.KING), Piece.createWhite(Piece.Type.BISHOP),
-                Piece.createWhite(Piece.Type.KNIGHT), Piece.createWhite(Piece.Type.ROOK)
-        ));
+        board.put(Position.of(7, 1), PieceFactory.KNIGHT.create(Color.WHITE));
+        board.put(Position.of(7, 6), PieceFactory.KNIGHT.create(Color.WHITE));
+        board.put(Position.of(0, 1), PieceFactory.KNIGHT.create(Color.BLACK));
+        board.put(Position.of(0, 6), PieceFactory.KNIGHT.create(Color.BLACK));
 
+        board.put(Position.of(7, 2), PieceFactory.BISHOP.create(Color.WHITE));
+        board.put(Position.of(7, 5), PieceFactory.BISHOP.create(Color.WHITE));
+        board.put(Position.of(0, 2), PieceFactory.BISHOP.create(Color.BLACK));
+        board.put(Position.of(0, 5), PieceFactory.BISHOP.create(Color.BLACK));
+
+        board.put(Position.of(7, 3), PieceFactory.QUEEN.create(Color.WHITE));
+        board.put(Position.of(0, 3), PieceFactory.QUEEN.create(Color.BLACK));
+
+        board.put(Position.of(7, 4), PieceFactory.KING.create(Color.WHITE));
+        board.put(Position.of(0, 4), PieceFactory.KING.create(Color.BLACK));
     }
 
-    public void initializeEmptyBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            List<Piece> emptyPieces = IntStream.range(0, BOARD_SIZE)
-                    .mapToObj(j -> Piece.createBlankPiece())
-                    .collect(Collectors.toList());
-            board.add(Rank.of(emptyPieces));
+    private void setEmptyBoard() {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                board.put(Position.of(y, x), PieceFactory.BLANK.create(Color.NOCOLOR));
+            }
         }
     }
 
-    private void placePiecesOnBoard() {
-        board.set(WHITE_PAWN_ROW, Rank.of(whitePieces.subList(0, 8)));
-        board.set(WHITE_MAIN_ROW, Rank.of(whitePieces.subList(8, 16)));
-        board.set(BLACK_MAIN_ROW, Rank.of(blackPieces.subList(0, 8)));
-        board.set(BLACK_PAWN_ROW, Rank.of(blackPieces.subList(8, 16)));
+    public void movePiece(Position from, Position to) {
+        Piece piece = board.get(from);
+        if (!piece.isValidMove(this, from, to)) {
+            throw new IllegalArgumentException("기물이 " + from + "에서 " + to + "으로 이동할 수 없습니다.");
+        }
+
+        Piece toPiece = board.get(to);
+        if (toPiece != null && piece.isSameTeam(toPiece)) {
+            throw new IllegalArgumentException("자신의 기물을 잡을 수 없습니다: " + to);
+        }
+
+        board.remove(from);
+        board.put(to, piece);
+        board.put(from, PieceFactory.BLANK.create(Color.NOCOLOR));
     }
 
-    public void print() {
-        System.out.println(showBoard());
+    public double calculateScore(Color color) {
+        double total = 0.0;
+        for (Piece piece : board.values()) {
+            if (piece != null && piece.belongsTo(color)) {
+                total += piece.getScore();
+            }
+        }
+
+        return total;
     }
 
-    public String showBoard() {
+    public boolean isOccupied(Position pos) {
+        Piece piece = board.get(pos);
+
+        return piece != null && !(piece instanceof Blank);
+    }
+
+    public Piece getPiece(Position pos) {
+        return board.getOrDefault(pos, PieceFactory.BLANK.create(Color.NOCOLOR));
+    }
+
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Rank rank : board) {
-            sb.append(rank).append(StringUtils.NEWLINE);
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                Piece piece = board.get(Position.of(y, x));
+                sb.append(piece);
+            }
+            sb.append(StringUtils.NEWLINE);
         }
         return sb.toString();
-    }
-
-    public void add(Piece piece) {
-        whitePieces.add(piece);
-    }
-
-    public void move(String position, Piece piece) {
-        Position pos = Position.of(position);
-
-        board.get(pos.y()).getPieces().set(pos.x(), piece);
-    }
-
-    public int pieceCount() {
-        return whitePieces.size() + blackPieces.size();
-    }
-
-    public int countPieces(Piece.Color color, Piece.Type type) {
-        return (int) board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color && piece.getType() == type)
-                .count();
-    }
-
-    public Piece findPawn(int index) {
-        return whitePieces.get(index);
-    }
-
-    public Piece findPiece(String position) {
-        Position pos = Position.of(position);
-
-        return board.get(pos.y()).getPieces().get(pos.x());
-    }
-
-    public String getPawnsResultWith(int row) {
-        return board.get(row).toString();
-    }
-
-    public double calculatePoint(Piece.Color color) {
-        return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
-                .mapToDouble(Piece::getPoint)
-                .sum();
-    }
-
-    public List<Piece> sortPiecesByAscending(Piece.Color color) {
-        return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
-                .sorted(Comparator.comparingDouble(Piece::getPoint))
-                .collect(Collectors.toList());
-    }
-
-    public List<Piece> sortPiecesByDescending(Piece.Color color) {
-        return board.stream()
-                .flatMap(rank -> rank.getPieces().stream())
-                .filter(piece -> piece.getColor() == color)
-                .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
-                .collect(Collectors.toList());
     }
 
 }
