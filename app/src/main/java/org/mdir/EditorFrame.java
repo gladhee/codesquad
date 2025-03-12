@@ -5,11 +5,20 @@ import java.awt.*;
 
 public class EditorFrame extends JFrame {
 
+    private final FileHandler fileHandler;
+
     private JTextArea textArea;
     private JButton loadButton;    // 불러오기 버튼
     private JButton saveButton;    // 저장하기 버튼
+    private JButton saveAsButton;  // 다른 이름으로 저장하기 버튼
 
-    public EditorFrame() {
+    public EditorFrame(FileHandler fileHandler) {
+        super("간단 텍스트 편집기");
+        this.fileHandler = fileHandler;
+        initUI();
+    }
+
+    private void initUI() {
         setTitle("간단 텍스트 편집기");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
@@ -30,11 +39,14 @@ public class EditorFrame extends JFrame {
 
         loadButton = new JButton("불러오기");
         saveButton = new JButton("저장하기");
+        saveAsButton = new JButton("다른 이름으로 저장하기");
 
         // 버튼들을 추가하고, 간격을 주기 위해 Strut 추가
         buttonPanel.add(loadButton);
         buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(saveButton);
+        buttonPanel.add(Box.createVerticalStrut(10));
+        buttonPanel.add(saveAsButton);
 
         // 버튼 패널을 BorderLayout의 동쪽(EAST)에 배치
         mainPanel.add(buttonPanel, BorderLayout.EAST);
