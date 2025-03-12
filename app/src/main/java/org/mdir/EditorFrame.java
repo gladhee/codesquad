@@ -59,6 +59,7 @@ public class EditorFrame extends JFrame {
 
         loadButton.addActionListener(this::onLoad);
         saveButton.addActionListener(this::onSave);
+        saveAsButton.addActionListener(this::onSaveAs);
 
         // 화면에 표시
         setVisible(true);
@@ -100,6 +101,28 @@ public class EditorFrame extends JFrame {
                         JOptionPane.INFORMATION_MESSAGE),
                 ex -> showError("파일을 저장하는 중 오류가 발생했습니다.\n" + ex.getMessage())
         );
+    }
+
+    private void onSaveAs(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showSaveDialog(this);
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        String content = textArea.getText();
+        File selectedFile = fileChooser.getSelectedFile();
+        fileHandler.writeFileAsync(
+                selectedFile,
+                content,
+                () -> JOptionPane.showMessageDialog(this,
+                        "파일이 성공적으로 저장되었습니다.",
+                        "알림",
+                        JOptionPane.INFORMATION_MESSAGE),
+                ex -> showError("파일을 저장하는 중 오류가 발생했습니다.\n" + ex.getMessage())
+        );
+
+        currentFile = selectedFile;
     }
 
     private void showError(String message) {
