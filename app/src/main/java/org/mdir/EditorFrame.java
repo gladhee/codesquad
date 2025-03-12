@@ -2,6 +2,8 @@ package org.mdir;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
 
 public class EditorFrame extends JFrame {
 
@@ -11,6 +13,7 @@ public class EditorFrame extends JFrame {
     private JButton loadButton;    // 불러오기 버튼
     private JButton saveButton;    // 저장하기 버튼
     private JButton saveAsButton;  // 다른 이름으로 저장하기 버튼
+    private File currentFile;
 
     public EditorFrame(FileHandler fileHandler) {
         super("간단 텍스트 편집기");
@@ -54,20 +57,33 @@ public class EditorFrame extends JFrame {
         // 프레임에 메인 패널 추가
         add(mainPanel);
 
+        loadButton.addActionListener(this::onLoad);
+
         // 화면에 표시
         setVisible(true);
     }
 
-    public JButton getLoadButton() {
-        return loadButton;
+    private void onLoad(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(this);
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File selectedFile = fileChooser.getSelectedFile();
+
+        fileHandler.readFileAsync(
+                selectedFile,
+                content -> {
+                    textArea.setText(content);
+                    currentFile = selectedFile;
+                },
+                ex -> showError("파일을 불러오는 중 오류가 발생했습니다.\n" + ex.getMessage())
+        );
     }
 
-    public JButton getSaveButton() {
-        return saveButton;
-    }
-
-    public JTextArea getTextArea() {
-        return textArea;
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "에러", JOptionPane.ERROR_MESSAGE);
     }
 
 }
