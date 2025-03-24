@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -37,6 +38,11 @@ public class GithubDashboardController {
         this.githubClient = githubClient;
         this.owner = owner;
         this.repo = repo;
+    }
+
+    @GetMapping("/")
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/github-stats")
