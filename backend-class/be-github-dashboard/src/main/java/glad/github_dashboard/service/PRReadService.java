@@ -20,7 +20,7 @@ public class PRReadService {
         this.repository = inMemoryPRRepository;
     }
 
-    public Map<String, UserPRStats> getStats(String username, boolean onlyStep, boolean onlySuccess) {
+    public Map<String, UserPRStats> getStats(String username) {
         List<PullRequest> pullRequests = repository.findAll();
         Map<String, UserPRStats> statsMap = new HashMap<>();
 
@@ -29,18 +29,14 @@ public class PRReadService {
 
             boolean isClosed = "closed".equals(pr.state());
             boolean isMerged = pr.merged_at() != null;
-            boolean hasStep = pr.labels().stream().anyMatch(label -> label.name("step"));
-            boolean hasSuccess = pr.labels().stream().anyMatch(label -> label.name().contains("정상"));
 
-            UserPRStats current = statsMap.getOrDefault(user, new UserPRStats(0, 0, 0, false, false));
+            UserPRStats current = statsMap.getOrDefault(user, new UserPRStats(0, 0, 0));
 
             statsMap.put(user, new UserPRStats(
                     current.total() + 1,
                     current.merged() + (isMerged ? 1 : 0),
-                    current.closed() + (isClosed && !isMerged ? 1 : 0),
-                    current.stepLabelExists() || hasStep,
-                    current.successLabelExists() || hasSuccess
-            ));
+                    current.closed() + (isClosed && !isMerged ? 1 : 0))
+            );
         }
 
         if (username != null && !username.isBlank()) {

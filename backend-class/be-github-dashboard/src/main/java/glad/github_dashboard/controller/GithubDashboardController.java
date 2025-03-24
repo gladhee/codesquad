@@ -24,11 +24,9 @@ public class GithubDashboardController {
     @GetMapping("/")
     public String showStats(
             @RequestParam(required = false) String username,
-            @RequestParam(required = false, defaultValue = "false") boolean onlyStep,
-            @RequestParam(required = false, defaultValue = "false") boolean onlySuccess,
             Model model
     ) {
-        model.addAttribute("stats", readService.getStats(username, onlyStep, onlySuccess));
+        model.addAttribute("stats", readService.getStats(username));
         return "index";
     }
 
