@@ -75,7 +75,7 @@ public class GithubDashboardController {
 
         if (username != null && !username.isBlank()) {
             statsMap = statsMap.entrySet().stream()
-                    .filter(entry -> entry.getKey().equalsIgnoreCase(username))
+                    .filter(entry -> entry.getKey().contains(username.toLowerCase()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
 
