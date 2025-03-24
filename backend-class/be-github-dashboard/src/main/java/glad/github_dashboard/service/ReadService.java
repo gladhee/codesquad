@@ -9,19 +9,18 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
-public class PRReadService {
+public class ReadService {
 
     private final PRRepository repository;
 
-    public PRReadService(InMemoryPRRepository inMemoryPRRepository) {
+    public ReadService(InMemoryPRRepository inMemoryPRRepository) {
         this.repository = inMemoryPRRepository;
     }
 
-    public Map<String, UserPRStats> getStats(String username) {
-        List<PullRequest> pullRequests = repository.findAll();
+    public Map<String, UserPRStats> getStats(String repo) {
+        List<PullRequest> pullRequests = repository.findPRsByRepositoryName(repo);
         Map<String, UserPRStats> statsMap = new HashMap<>();
 
         for (PullRequest pr : pullRequests) {
@@ -39,17 +38,11 @@ public class PRReadService {
             );
         }
 
-        if (username != null && !username.isBlank()) {
-            statsMap = statsMap.entrySet().stream()
-                    .filter(entry -> entry.getKey().toLowerCase().contains(username.toLowerCase()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
-
         return statsMap;
     }
 
-    public List<PullRequest> getUserPRs(String username) {
-        return repository.findByUsernameIgnoreCase(username);
+    public List<PullRequest> getUserPRs(String repo, String username) {
+        return repository.findPRsByRepositoryNameAndUsernameIgnoreCase(username);
     }
 
 }

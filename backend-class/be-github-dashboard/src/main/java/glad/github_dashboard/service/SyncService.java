@@ -4,6 +4,7 @@ import glad.github_dashboard.client.GithubClient;
 import glad.github_dashboard.dao.InMemoryPRRepository;
 import glad.github_dashboard.dao.PRRepository;
 import glad.github_dashboard.dto.PullRequest;
+import glad.github_dashboard.dto.RepositoryInfo;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,32 +12,37 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PRSyncService {
+public class SyncService {
 
     private final GithubClient githubClient;
     private final PRRepository repository;
     private final String owner;
-    private final String repo;
 
-    public PRSyncService(GithubClient githubClient,
-                         InMemoryPRRepository inMemoryPRRepository,
-                         @Value("${github.repo-owner}") String owner,
-                         @Value("${github.repo-name}") String repo) {
+    public SyncService(GithubClient githubClient,
+                       InMemoryPRRepository inMemoryPRRepository,
+                       @Value("${github.repo-owner}") String owner) {
         this.githubClient = githubClient;
         this.repository = inMemoryPRRepository;
         this.owner = owner;
-        this.repo = repo;
     }
 
     @PostConstruct
     public void init() {
-        refreshData();
+        refreshAllRepo();
     }
 
-    public void refreshData() {
+    public void refreshAllRepo() {
+        List<RepositoryInfo> repositories = githubClient.getRepositories(owner);
+        for (RepositoryInfo info : repositories) {
+            refreshRepo(info.name());
+        }
+    }
+
+    public void refreshRepo(String repo) {
         List<PullRequest> pullRequests = githubClient.getPullRequests(owner, repo);
 
-        repository.deleteAll();
-        repository.saveAll(pullRequests);
+        repository.deleteAll(repo);
+        repository.saveAll(repo, pullRequests);
     }
+
 }
