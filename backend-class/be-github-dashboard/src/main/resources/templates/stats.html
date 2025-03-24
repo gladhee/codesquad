@@ -16,14 +16,16 @@
 <br>
 
 <div th:each="entry : ${stats}">
-    <div class="user-card">
-        <p class="label">👤 사용자: <span th:text="${entry.key}"></span></p>
-        <p>전체 PR: <span th:text="${entry.value.total}"></span></p>
-        <p>병합됨: <span th:text="${entry.value.merged}"></span></p>
-        <p>닫힘: <span th:text="${entry.value.closed}"></span></p>
-        <p>✅ step 라벨 있음: <span th:text="${entry.value.stepLabelExists} ? '✅' : '❌'"></span></p>
-        <p>✅ 정상 라벨 있음: <span th:text="${entry.value.successLabelExists} ? '✅' : '❌'"></span></p>
-    </div>
+    <a th:href="@{'/github-stats/' + ${entry.key}}" style="text-decoration: none; color: inherit;">
+        <div class="user-card">
+            <p class="label">👤 사용자: <span th:text="${entry.key}"></span></p>
+            <p>전체 PR: <span th:text="${entry.value.total}"></span></p>
+            <p>병합됨: <span th:text="${entry.value.merged}"></span></p>
+            <p>닫힘: <span th:text="${entry.value.closed}"></span></p>
+            <p>step 라벨 있음: <span th:text="${entry.value.stepLabelExists} ? '✅' : '❌'"></span></p>
+            <p>정상 라벨 있음: <span th:text="${entry.value.successLabelExists} ? '✅' : '❌'"></span></p>
+        </div>
+    </a>
 </div>
 
 </body>
