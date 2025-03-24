@@ -1,0 +1,5 @@
+github:
+  api-url: https://api.github.com
+  token: ${GITHUB_TOKEN}
+  repo-owner: codesquad-members-2025
+  repo-name: be-chess
