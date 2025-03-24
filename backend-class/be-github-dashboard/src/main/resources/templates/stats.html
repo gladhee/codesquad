@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub PR 통계</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .user-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .stat {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{nav.html}"></div>
+
+<h1>📊 GitHub PR 통계</h1>
+
+<div class="user-grid">
+    <div th:each="entry : ${stats}">
+        <a th:href="@{/{repo}/{username}(repo=${repo}, username=${entry.key})}">
+            <div class="user-card">
+                <div class="user-name" th:text="${entry.key}"></div>
+                <div class="stat">📦 전체 PR: <span th:text="${entry.value.total}"></span></div>
+                <div class="stat">✅ 병합됨: <span th:text="${entry.value.merged}"></span></div>
+                <div class="stat">❌ 닫힘: <span th:text="${entry.value.closed}"></span></div>
+            </div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
