@@ -39,4 +39,10 @@ public class GithubDashboardController {
         return "detail";
     }
 
+    @GetMapping("/refresh")
+    public String refresh() {
+        syncService.refreshData();
+        return "redirect:/";
+    }
+
 }

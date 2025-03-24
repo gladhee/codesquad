@@ -18,6 +18,12 @@
             font-size: 18px;
         }
 
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .search-form input[type="text"] {
             padding: 6px;
             border-radius: 4px;
@@ -25,11 +31,11 @@
             outline: none;
         }
 
-        .search-form button {
+        .search-form button,
+        .refresh-btn {
             padding: 6px 10px;
             border: none;
             border-radius: 4px;
-            margin-left: 5px;
             background-color: #3498db;
             color: white;
             font-weight: bold;
@@ -42,10 +48,16 @@
 <div class="navbar">
     <a href="/">🏠 GitHub PR Dashboard</a>
 
-    <form class="search-form" method="get" action="/">
-        <input type="text" name="username" placeholder="사용자 검색..." />
-        <button type="submit">검색</button>
-    </form>
+    <div class="actions">
+        <form class="search-form" method="get" action="/">
+            <input type="text" name="username" placeholder="사용자 검색..." />
+            <button type="submit">검색</button>
+        </form>
+
+        <form method="get" action="/refresh">
+            <button class="refresh-btn" type="submit">🔄 새로고침</button>
+        </form>
+    </div>
 </div>
 
 </body>
