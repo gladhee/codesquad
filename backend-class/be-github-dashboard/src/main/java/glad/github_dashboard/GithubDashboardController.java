@@ -100,4 +100,17 @@ public class GithubDashboardController {
         return "stats";
     }
 
+    @GetMapping("/github-stats/{username}")
+    public String showUserDetails(@PathVariable String username, Model model) {
+        List<PullRequest> pullRequests = githubClient.getPullRequests(owner, repo);
+
+        List<PullRequest> userPRs = pullRequests.stream()
+                .filter(pr -> pr.user().login().equalsIgnoreCase(username))
+                .toList();
+
+        model.addAttribute("username", username);
+        model.addAttribute("prs", userPRs);
+        return "user-detail";
+    }
+
 }

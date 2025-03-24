@@ -11,14 +11,7 @@
 </head>
 <body>
 
-<h1>📊 GitHub PR 통계</h1>
-
-<form method="get" action="/github-stats">
-    사용자명: <input type="text" name="username" placeholder="아이디 입력" />
-    <label><input type="checkbox" name="onlyStep" value="true" /> step 라벨 있음만</label>
-    <label><input type="checkbox" name="onlySuccess" value="true" /> 정상 라벨 있음만</label>
-    <button type="submit">검색</button>
-</form>
+<div th:replace="~{nav.html}"></div>
 
 <br>
 
