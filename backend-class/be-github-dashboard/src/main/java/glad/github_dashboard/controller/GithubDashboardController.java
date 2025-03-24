@@ -1,4 +1,4 @@
-package glad.github_dashboard;
+package glad.github_dashboard.controller;
 
 import glad.github_dashboard.client.GithubClient;
 import glad.github_dashboard.dto.PullRequest;
