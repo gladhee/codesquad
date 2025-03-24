@@ -41,11 +41,6 @@ public class GithubDashboardController {
     }
 
     @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-    @GetMapping("/github-stats")
     public String showStats(
             @RequestParam(required = false) String username,
             @RequestParam(required = false, defaultValue = "false") boolean onlyStep,
@@ -98,10 +93,10 @@ public class GithubDashboardController {
 
         model.addAttribute("stats", statsMap);
 
-        return "stats";
+        return "index";
     }
 
-    @GetMapping("/github-stats/{username}")
+    @GetMapping("/{username}")
     public String showUserDetails(@PathVariable String username, Model model) {
         List<PullRequest> pullRequests = githubClient.getPullRequests(owner, repo);
 
@@ -111,7 +106,7 @@ public class GithubDashboardController {
 
         model.addAttribute("username", username);
         model.addAttribute("prs", userPRs);
-        return "user-detail";
+        return "detail";
     }
 
 }
