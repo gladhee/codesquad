@@ -58,8 +58,9 @@ public class GithubDashboardController {
         for (PullRequest pr : pullRequests) {
             logger.info(pr.toString());
             String user = pr.user().login();
-            boolean isMerged = Boolean.TRUE.equals(pr.merged());
+
             boolean isClosed = "closed".equals(pr.state());
+            boolean isMerged = pr.merged_at() != null;
 
             boolean hasStep = pr.labels().stream().anyMatch(label -> label.name().startsWith("step"));
             boolean hasSuccess = pr.labels().stream().anyMatch(label -> label.name().contains("정상"));

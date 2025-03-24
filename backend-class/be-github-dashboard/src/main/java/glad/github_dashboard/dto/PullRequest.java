@@ -7,7 +7,7 @@ public record PullRequest(
         String title,
         int number,
         String state,
-        Boolean merged,
+        String merged_at,
         User user,
         List<Label> labels
 ) {
