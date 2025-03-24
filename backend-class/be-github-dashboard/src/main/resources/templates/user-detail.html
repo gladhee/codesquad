@@ -13,7 +13,7 @@
   <li th:each="pr : ${prs}">
     PR #<span th:text="${pr.number()}"></span>:
     <span th:text="${pr.state()}"></span>,
-    Merged: <span th:text="${pr.merged()}"></span>,
+    Merged: <span th:text="${pr.merged_at()}"></span>,
     라벨:
     <span th:each="label : ${pr.labels()}" th:text="${label.name()} + ' '" />
   </li>
