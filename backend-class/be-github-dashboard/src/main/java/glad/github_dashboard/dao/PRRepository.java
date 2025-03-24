@@ -5,8 +5,8 @@ import glad.github_dashboard.dto.PullRequest;
 import java.util.List;
 
 public interface PRRepository {
-    List<PullRequest> findAll();
-    List<PullRequest> findByUsernameIgnoreCase(String username);
-    boolean saveAll(List<PullRequest> pullRequests);
-    boolean deleteAll();
+    List<PullRequest> findPRsByRepositoryName(String repositoryName);
+    List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String username);
+    boolean saveAll(String repositoryName, List<PullRequest> pullRequests);
+    boolean deleteAll(String repositoryName);
 }
