@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub PR 통계 검색</title>
+</head>
+<body>
+<h1>🔍 GitHub PR 통계 검색</h1>
+
+<form method="get" action="/github-stats">
+    사용자명: <input type="text" name="username" />
+    <label><input type="checkbox" name="onlyStep" value="true" /> step 라벨 있음만</label>
+    <label><input type="checkbox" name="onlySuccess" value="true" /> 정상 라벨 있음만</label>
+    <button type="submit">검색</button>
+</form>
+</body>
+</html>
