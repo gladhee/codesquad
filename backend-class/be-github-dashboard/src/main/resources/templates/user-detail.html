@@ -1,23 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${username} + '의 PR 상세 정보'"></title>
+  <meta charset="UTF-8" />
+  <title th:text="${username} + '님의 PR 목록'"></title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    a.back {
+      display: block;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #3498db;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .pr-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .pr-card {
+      background-color: #fff;
+      padding: 16px 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      width: 400px;
+      transition: transform 0.2s;
+    }
+
+    .pr-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .pr-header {
+      margin-bottom: 8px;
+    }
+
+    .pr-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    .pr-meta {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .status {
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .merged {
+      color: #27ae60;
+    }
+
+    .closed {
+      color: #e74c3c;
+    }
+
+    .label {
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 4px 6px 0 0;
+      border-radius: 4px;
+      font-size: 12px;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<div th:replace="~{nav.html}"></div>
-<h1 th:text="${username} + '님의 PR 목록'"></h1>
-<a href="/github-stats">← 목록으로 돌아가기</a>
 
-<ul>
-  <li th:each="pr : ${prs}">
-    PR #<span th:text="${pr.number()}"></span>:
-    <span th:text="${pr.state()}"></span>,
-    Merged: <span th:text="${pr.merged_at()}"></span>,
-    라벨:
-    <span th:each="label : ${pr.labels()}" th:text="${label.name()} + ' '" />
-  </li>
-</ul>
+<div th:replace="~{nav.html}"></div>
+
+<h1 th:text="${username} + '님의 PR 목록'"></h1>
+
+<div class="pr-list">
+  <div th:each="pr : ${prs}" class="pr-card">
+    <div class="pr-header">
+      <a th:href="${pr.html_url()}" target="_blank" class="pr-title" th:text="'#' + ${pr.number()} + ' - ' + ${pr.title()}"></a>
+    </div>
+    <div class="pr-meta">
+      상태:
+      <span th:if="${pr.merged_at() != null}" class="status merged">Merged</span>
+      <span th:if="${pr.merged_at() == null}" class="status closed" th:text="${pr.state()}"></span>
+    </div>
+    <div class="pr-labels">
+            <span th:each="label : ${pr.labels()}"
+                  class="label"
+                  th:text="${label.name()}"
+                  th:style="'background-color:#' + ${label.color()}"></span>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
