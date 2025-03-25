@@ -1,11 +1,9 @@
 package glad.github_dashboard.controller;
 
-import glad.github_dashboard.client.GithubClient;
 import glad.github_dashboard.dto.RepositoryInfo;
 import glad.github_dashboard.service.SyncService;
 import glad.github_dashboard.service.ReadService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,24 +16,18 @@ import java.util.List;
 @Controller
 public class GithubDashboardController {
 
-    private final String owner;
-    private final GithubClient githubClient;
     private final ReadService readService;
     private final SyncService syncService;
 
-    public GithubDashboardController(@Value("${github.repo-owner}") String owner,
-                                     GithubClient githubClient,
-                                     ReadService readService,
+    public GithubDashboardController(ReadService readService,
                                      SyncService syncService) {
-        this.owner = owner;
-        this.githubClient = githubClient;
         this.readService = readService;
         this.syncService = syncService;
     }
 
     @GetMapping("/")
     public String showAllRepository(Model model) {
-        List<RepositoryInfo> repositories = githubClient.getRepositories(owner);
+        List<RepositoryInfo> repositories = readService.getRepositories();
         model.addAttribute("repos", repositories);
         return "index";
     }
