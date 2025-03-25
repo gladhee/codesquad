@@ -8,6 +8,7 @@ import java.util.List;
 public interface PRRepository {
     List<RepositoryInfo> findRepositories();
     boolean saveAllRepositories(List<RepositoryInfo> repositories);
+    boolean deleteAllRepositories();
     List<PullRequest> findPRsByRepositoryName(String repositoryName);
     List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String repo, String username);
     boolean saveAll(String repositoryName, List<PullRequest> pullRequests);

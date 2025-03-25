@@ -33,6 +33,12 @@ public class InMemoryPRRepository implements PRRepository {
     }
 
     @Override
+    public boolean deleteAllRepositories() {
+        repositories.clear();
+        return true;
+    }
+
+    @Override
     public List<PullRequest> findPRsByRepositoryName(String repositoryName) {
         return repositoryPullRequests.get(repositoryName);
     }

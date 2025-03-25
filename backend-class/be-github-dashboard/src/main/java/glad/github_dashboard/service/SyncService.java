@@ -35,6 +35,7 @@ public class SyncService {
     @Async
     public void refreshAllRepo() {
         List<RepositoryInfo> repositories = githubClient.getRepositories(owner);
+        repository.deleteAllRepositories();
         repository.saveAllRepositories(repositories);
         for (RepositoryInfo info : repositories) {
             refreshRepo(info.name());
