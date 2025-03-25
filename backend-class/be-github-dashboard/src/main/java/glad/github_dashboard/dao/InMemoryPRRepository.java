@@ -24,9 +24,8 @@ public class InMemoryPRRepository implements PRRepository {
     }
 
     @Override
-    public List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String username) {
-        return repositoryPullRequests.values().stream()
-                .flatMap(List::stream)
+    public List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String repo, String username) {
+        return repositoryPullRequests.get(repo).stream()
                 .filter(pr -> pr.user().login().equalsIgnoreCase(username))
                 .collect(Collectors.toList());
     }

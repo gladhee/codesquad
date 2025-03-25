@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PRRepository {
     List<PullRequest> findPRsByRepositoryName(String repositoryName);
-    List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String username);
+    List<PullRequest> findPRsByRepositoryNameAndUsernameIgnoreCase(String repo, String username);
     boolean saveAll(String repositoryName, List<PullRequest> pullRequests);
     boolean deleteAll(String repositoryName);
 }

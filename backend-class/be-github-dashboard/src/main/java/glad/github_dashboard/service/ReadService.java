@@ -42,7 +42,7 @@ public class ReadService {
     }
 
     public List<PullRequest> getUserPRs(String repo, String username) {
-        return repository.findPRsByRepositoryNameAndUsernameIgnoreCase(username);
+        return repository.findPRsByRepositoryNameAndUsernameIgnoreCase(repo, username);
     }
 
 }
