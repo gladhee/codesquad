@@ -59,6 +59,12 @@ public class GithubDashboardController {
         return "detail";
     }
 
+    @GetMapping("/refresh-all")
+    public String refreshAll() {
+        syncService.refreshAllRepo();
+        return "redirect:/";
+    }
+
     @GetMapping("/{repo}/refresh")
     public String refresh(@PathVariable String repo) {
         syncService.refreshRepo(repo);

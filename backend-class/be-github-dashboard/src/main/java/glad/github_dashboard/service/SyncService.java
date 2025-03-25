@@ -7,6 +7,7 @@ import glad.github_dashboard.dto.PullRequest;
 import glad.github_dashboard.dto.RepositoryInfo;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class SyncService {
         refreshAllRepo();
     }
 
+    @Async
     public void refreshAllRepo() {
         List<RepositoryInfo> repositories = githubClient.getRepositories(owner);
         for (RepositoryInfo info : repositories) {
@@ -38,6 +40,7 @@ public class SyncService {
         }
     }
 
+    @Async
     public void refreshRepo(String repo) {
         List<PullRequest> pullRequests = githubClient.getPullRequests(owner, repo);
 

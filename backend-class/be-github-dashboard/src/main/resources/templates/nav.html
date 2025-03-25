@@ -58,8 +58,8 @@
         </form>
 
 
-        <form method="get" action="/refresh">
-            <button class="refresh-btn" type="submit">🔄 새로고침</button>
+        <form th:if="${repo}" method="get" th:action="@{/{repo}/refresh(repo=${repo})}">
+            <button type="submit">🔄 레포 새로고침</button>
         </form>
     </div>
 </div>
