@@ -3,6 +3,7 @@ package glad.github_dashboard.service;
 import glad.github_dashboard.dao.InMemoryPRRepository;
 import glad.github_dashboard.dao.PRRepository;
 import glad.github_dashboard.dto.PullRequest;
+import glad.github_dashboard.dto.RepositoryInfo;
 import glad.github_dashboard.dto.UserPRStats;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,10 @@ public class ReadService {
 
     public List<PullRequest> getUserPRs(String repo, String username) {
         return repository.findPRsByRepositoryNameAndUsernameIgnoreCase(repo, username);
+    }
+
+    public List<RepositoryInfo> getRepositories() {
+        return repository.findRepositories();
     }
 
 }
