@@ -1,6 +1,7 @@
 package glad.github_dashboard.dao;
 
 import glad.github_dashboard.dto.PullRequest;
+import glad.github_dashboard.dto.RepositoryInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,10 +13,23 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryPRRepository implements PRRepository {
 
+    private final List<RepositoryInfo> repositories;
     private final Map<String, List<PullRequest>> repositoryPullRequests;
 
     public InMemoryPRRepository() {
+        this.repositories = new ArrayList<>();
         this.repositoryPullRequests = new HashMap<>();
+    }
+
+    @Override
+    public List<RepositoryInfo> findRepositories() {
+        return repositories;
+    }
+
+    @Override
+    public boolean saveAllRepositories(List<RepositoryInfo> repositories) {
+        this.repositories.addAll(repositories);
+        return true;
     }
 
     @Override
