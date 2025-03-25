@@ -19,7 +19,7 @@ public class ReadService {
         this.repository = inMemoryPRRepository;
     }
 
-    public Map<String, UserPRStats> getStats(String repo) {
+    public Map<String, UserPRStats> getStats(String repo, String username) {
         List<PullRequest> pullRequests = repository.findPRsByRepositoryName(repo);
         Map<String, UserPRStats> statsMap = new HashMap<>();
 
@@ -36,6 +36,10 @@ public class ReadService {
                     current.merged() + (isMerged ? 1 : 0),
                     current.closed() + (isClosed && !isMerged ? 1 : 0))
             );
+        }
+
+        if (username != null && !username.isBlank()) {
+            statsMap.entrySet().removeIf(entry -> !entry.getKey().toLowerCase().contains(username.toLowerCase()));
         }
 
         return statsMap;

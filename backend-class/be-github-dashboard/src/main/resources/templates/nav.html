@@ -46,13 +46,17 @@
 <body>
 
 <div class="navbar">
-    <a href="/">🏠 GitHub PR Dashboard</a>
+    <p>🏠 GitHub PR Dashboard</p>
+    <a href="/" class="nav-btn">🗂 전체 레포</a>
+
+    <a th:if="${repo}" th:href="@{/{repo}(repo=${repo})}" class="nav-btn">📊 레포 통계</a>
 
     <div class="actions">
-        <form class="search-form" method="get" action="/">
-            <input type="text" name="username" placeholder="사용자 검색..." />
+        <form th:action="@{/{repo}(repo=${repo})}" method="get">
+            <input type="text" name="username" placeholder="사용자 검색..." th:value="${username}" />
             <button type="submit">검색</button>
         </form>
+
 
         <form method="get" action="/refresh">
             <button class="refresh-btn" type="submit">🔄 새로고침</button>

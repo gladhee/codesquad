@@ -46,7 +46,7 @@ public class GithubDashboardController {
             @RequestParam(required = false) String username,
             Model model) {
         model.addAttribute("repo", repo);
-        model.addAttribute("stats", readService.getStats(repo));
+        model.addAttribute("stats", readService.getStats(repo, username));
         return "stats";
     }
 
